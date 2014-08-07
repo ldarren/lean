@@ -1,2 +1,2 @@
-#!/usr/bin/bash
-lessc -x --source-map less/lean.less lean.css
+#!/bin/bash
+lessc -x --source-map less/index.less lean.css
