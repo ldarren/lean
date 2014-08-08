@@ -52,18 +52,19 @@ html, body {
           transition: width 0.3s ease;
 }
 
-.snap-drawer-left {
+.snapjs-left .snap-drawer-left {
   left: 0;
   z-index: 1;
+  display: block;
 }
 
-.snap-drawer-right {
+.snapjs-right .snap-drawer-right {
   right: 0;
   z-index: 1;
+  display: block;
 }
 
-.snapjs-left .snap-drawer-right,
-.snapjs-right .snap-drawer-left {
+.snap-drawer-right, .snap-drawer-left {
   display: none;
 }
 

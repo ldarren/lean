@@ -183,7 +183,6 @@
                     settings.element.style[cache.vendor+'Transition'] = '';
                     cache.translation = action.translate.get.matrix(4);
                     cache.easing = false;
-                    clearInterval(cache.animatingInterval);
 
                     if(cache.easingTo===0){
                         utils.klass.remove(doc.body, 'snapjs-right');
@@ -204,11 +203,7 @@
 
                         settings.element.style[cache.vendor+'Transition'] = 'all ' + settings.transitionSpeed + 's ' + settings.easing;
 
-                        clearInterval(cache.animatingInterval);
                         utils.dispatchEvent('animate');
-                        cache.animatingInterval = setInterval(function() {
-                            utils.dispatchEvent('animating');
-                        }, 1);
                         
                         utils.events.addEvent(settings.element, utils.transitionCallback(), action.translate.easeCallback);
                         action.translate.x(n);

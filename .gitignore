@@ -1,6 +1,8 @@
 # Logs
 logs
 *.log
+
+# vi cache
 .*.sw?
 
 # Runtime data
@@ -19,6 +21,9 @@ coverage
 
 # Compiled binary addons (http://nodejs.org/api/addons.html)
 build/Release
+lean.css
+lean.css.map
+lean.js
 
 # Dependency directory
 # Deployed apps should consider commenting this line out:
