@@ -42,7 +42,7 @@
 
     targetTab.classList.add(className);
 
-    if (!targetTab.hash) {
+    if (!targetTab.hash || (-1 !== targetTab.hash.indexOf('/'))) {
       return;
     }
 

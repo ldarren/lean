@@ -46,7 +46,7 @@
   var getPopover = function (e) {
     var anchor = findPopovers(e.target);
 
-    if (!anchor || !anchor.hash || (anchor.hash.indexOf('/') > 0)) {
+    if (!anchor || !anchor.hash || (-1 !== anchor.hash.indexOf('/'))) {
       return;
     }
 
