@@ -11,23 +11,28 @@
     stateHistory = [],
 
     // Use this function if you want PageSlider to automatically determine the sliding direction based on the state history
-    slidePage = function(page, from) {
-        if (from) return slidePageFrom(page, from)
+    slidePage = function(e) {
+        var 
+        page = e._args[0],
+        from = e._args[1],
+        l = stateHistory.length,
+        state = window.location.hash;
 
-        var l = stateHistory.length,
-            state = window.location.hash;
+        if (from){
+            return slidePageFrom(page, from)
+        }
 
         if (l === 0) {
             stateHistory.push(state);
-            this.slidePageFrom(page);
+            slidePageFrom(page);
             return;
         }
         if (state === stateHistory[l-2]) {
             stateHistory.pop();
-            this.slidePageFrom(page, 'left');
+            slidePageFrom(page, 'left');
         } else {
             stateHistory.push(state);
-            this.slidePageFrom(page, 'right');
+            slidePageFrom(page, 'right');
         }
 
     },
@@ -52,7 +57,7 @@
         }, false);
 
         // Force reflow. More information here: http://www.phpied.com/rendering-repaint-reflowrelayout-restyle/
-        container[0].offsetWidth;
+        container.offsetWidth;
 
         // Position the new page and the current page at the ending position of their animation with a transition class indicating the duration of the animation
         page.className = "page transition center"
