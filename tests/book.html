@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset=utf-8>
+<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width, minimal-ui">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>Raya UI</title>
+<link rel=stylesheet href=lib/lean/lean.css>
+<style>
+    #leftDrawer{
+        position:absolute;
+        top:0;
+        bottom:0;
+        width:200px;
+        left:0;
+        background-color:blue;
+    }
+    #rightDrawer{
+        position:absolute;
+        top:0;
+        bottom:0;
+        width:100px;
+        right:0;
+        background-color:green;
+    }
+    #content{
+        position:absolute;
+        top:0;
+        left:0;
+        height:100%;
+        width:100%;
+        overflow:hidden;
+    }
+    .header{
+        background-color:rgba(255,0,0,0.8);
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+        height:44px;
+        z-index:100;
+    }
+    .header .btn{
+        display:block;
+        float:left;
+        width:44px;
+        height:44px;
+        line-height:44px;
+        text-align:center;
+        color:black;
+        cursor:pointer;
+    }
+    .header .btn:hover{
+        color:white;
+        background-color:rgba(50,50,50,0.3)
+    }
+    .lnPage{
+        background-color:yellow;
+    }
+</style>
+</head>
+<body>
+
+<div id=drawers>
+    <div id=leftDrawer class=hidden></div>
+    <div id=rightDrawer class=hidden></div>
+</div>
+<div id=content class="lnBook lnSlider">
+    <div class="header lnSlider lnSurface"><span class="btn menu-left">#</span><span class="btn nav-right">&lt</span><span class="btn nav-left" style="float:right">&gt</span><span class="btn menu-right" style="float:right">#</span></div>
+    <div class="lnPage">Home</div>
+</div>
+
+<script src="lib/pico/pico.js"></script>
+<script src="lib/lean/lean.js"></script>
+<script>
+    var
+    content = document.querySelector('#content'),
+    header = content.querySelector('.header'),
+    leftDrawer = document.querySelector('#leftDrawer'),
+    rightDrawer = document.querySelector('#rightDrawer'),
+    hasHeader = true,
+    isOpened = false
+
+    function toggleHeader(e){
+        header.dispatchEvent(pico.createEvent('transit', hasHeader ? {from:'bottom', ref:header} : undefined))
+        hasHeader = !hasHeader
+    }
+    content.querySelector('.lnPage').addEventListener('touchstart', toggleHeader, false)
+    content.addEventListener('transited', function(e){
+        if (isOpened) return false
+        leftDrawer.classList.add('hidden')
+        rightDrawer.classList.add('hidden')
+    }, false)
+    header.querySelector('.btn.menu-left').addEventListener('touchstart', function(){
+        if (isOpened){
+            content.dispatchEvent(pico.createEvent('transit'))
+            isOpened = false
+            return
+        }
+        isOpened = true
+        leftDrawer.classList.remove('hidden')
+        content.dispatchEvent(pico.createEvent('transit', {from:'left', ref:leftDrawer}))
+    }, false)
+    header.querySelector('.btn.menu-right').addEventListener('touchstart', function(){
+        if (isOpened){
+            content.dispatchEvent(pico.createEvent('transit'))
+            isOpened = false 
+            return
+        }
+        isOpened = true
+        rightDrawer.classList.remove('hidden')
+        content.dispatchEvent(pico.createEvent('transit', {from:'right', ref:rightDrawer}))
+    }, false)
+    header.querySelector('.btn.nav-left').addEventListener('touchstart', function(){
+        var page = document.createElement('div')
+        page.textContent = 'left '+Date.now()
+        page.addEventListener('touchstart', toggleHeader, false)
+        content.dispatchEvent(pico.createEvent('flip', {page:page, from:'left'}))
+    }, false)
+    header.querySelector('.btn.nav-right').addEventListener('touchstart', function(){
+        var page = document.createElement('div')
+        page.textContent = 'right'+Date.now()
+        page.addEventListener('touchstart', toggleHeader, false)
+        content.dispatchEvent(pico.createEvent('flip', {page:page, from:'right'}))
+    }, false)
+</script>
+</body>
+</html>
