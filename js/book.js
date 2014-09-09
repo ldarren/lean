@@ -49,5 +49,5 @@
         }
     }
     reset()
-    document.addEventListener('reset', reset, false)
+    document.addEventListener('lnReset', reset, false)
 }()
