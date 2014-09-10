@@ -14,6 +14,8 @@
         page = e.detail.page,
         currPage = book.querySelector('.lnPage')
 
+        if (!book || !page) return
+
         if (!currPage){
             page.classList.add('lnPage')
             book.appendChild(page)
@@ -22,9 +24,8 @@
 
         currPage.addEventListener(transitionend, function cb(e){
             currPage.removeEventListener(transitionend, cb)
-            currPage.parentNode.removeChild(currPage)
+            book.dispatchEvent(pico.createEvent('flipped', {page:currPage}))
             currPage = undefined
-            book.dispatchEvent(pico.createEvent('flipped'))
         }, false)
 
         switch(e.detail.from){
