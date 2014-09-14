@@ -3,23 +3,25 @@
 
     var
     cancelled = false,
-    longTabTimer = 0,
-    lastTab = 0,
-    longTab = function(e){
+    longTapTimer = 0,
+    lastTap = 0,
+    longTap = function(e){
         if (cancelled) return
         cancelled = true
-        e.target.dispatchEvent(pico.createEvent('longTab'))
+        e.target.dispatchEvent(pico.createEvent('longTap', null, true))
     }
     touchstart = function(e){
         cancelled = false
-        lastDown = window.setTimeout(longTab, 2000, e)
+        lastDown = window.setTimeout(longTap, 2000, e)
     },
     touchend = function(e){
-        window.clearTimeout(longTabTimer)
+        window.clearTimeout(longTapTimer)
         if (cancelled) return
-        var now = Date.now()
-        if (now - lastTab < 500) e.target.dispatchEvent(pico.createEvent('tabs'))
-        else e.target.dispatchEvent(pico.createEvent('tab'))
+        var
+        evt = 'tap',
+        now = Date.now()
+        if (now - lastTap < 500) evt='taps'
+        e.target.dispatchEvent(pico.createEvent(evt, null, true))
 
     },
     touchmove = function(e){
@@ -27,7 +29,7 @@
     },
     touchcancel = function(e){
         cancelled = true
-        window.clearTimeout(longTabTimer)
+        window.clearTimeout(longTapTimer)
     }
     document.addEventListener('touchstart', touchstart,  true)
     document.addEventListener('touchend', touchend,  true)
