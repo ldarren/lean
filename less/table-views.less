@@ -102,6 +102,35 @@
   }
 }
 
+// Add chevrons to elements
+.navigate-left,
+.navigate-right,
+.push-left,
+.push-right {
+    &:after {
+        position: absolute;
+        top: 50%;
+        display: inline-block;
+        font-family: fontello;
+        font-size: inherit;
+        line-height: 1;
+        color: #bbb;
+        text-decoration: none;
+        -webkit-font-smoothing: antialiased;
+        .transform(translateY(-50%));
+    }
+}
+.navigate-left:after,
+.push-left:after {
+    left: 15px;
+    content: '\e808';
+}
+.navigate-right:after,
+.push-right:after{
+    right: 15px;
+    content: '\e80b';
+}
+
 // If the table view is the first component, give it extra margin on top.
 .page > .table-view:first-child {
   margin-top: 15px;
