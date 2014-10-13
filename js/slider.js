@@ -4,11 +4,10 @@
         tmp = document.createElement('div'),
         prefixes = ['webkit', 'Moz', 'O', ' ms']
         for (var i=0,p; p=prefixes[i]; i++){
-            if ('undefined' !== typeof tmp.style[p + 'TransitionEnd']) return p+'TransitionEnd'
+            if(('on' + p + 'transitionend') in window) return p+'TransitionEnd'
         }
         return 'transitionend'
     }()
-
     function transited(e){
         var ele = e.target
         ele.removeEventListener(transitionend, transited)
@@ -19,7 +18,6 @@
         ele = e.target,
         detail = e.detail,
         dir,dist
-
         ele.addEventListener(transitionend, transited, false)
         if (!detail) return ele.style.cssText = ''
 

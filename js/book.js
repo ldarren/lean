@@ -4,7 +4,7 @@
         tmp = document.createElement('div'),
         prefixes = ['webkit', 'Moz', 'O', ' ms']
         for (var i=0,p; p=prefixes[i]; i++){
-            if ('undefined' !== typeof tmp.style[p + 'TransitionEnd']) return p+'TransitionEnd'
+            if(('on' + p + 'transitionend') in window) return p+'TransitionEnd'
         }
         return 'transitionend'
     }()
