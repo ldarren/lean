@@ -4,7 +4,7 @@ var
 fs = require('fs'),
 path = require('path'),
 symPath = process.argv[1],
-dest = path.sep + (process.argv[2] || 'lean.js'),
+dest = path.sep + (process.argv[2] || 'output.js'),
 srcDir = path.sep + (process.argv[3] || 'js') + path.sep
 
 fs.readlink(symPath, function(err, realPath){
@@ -31,7 +31,9 @@ fs.readlink(symPath, function(err, realPath){
 
 				rs.on('close', function(){ callee(cb) })
 				rs.pipe(ws, {end:false})
-			})(function(){ console.log('Done!')})  
+			})(function(){
+                console.log('Done!')
+            })  
 		})      
 	})
 })              
