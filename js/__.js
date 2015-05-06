@@ -1,4 +1,15 @@
 var __ = {
+    env:{},
+    onLoad: function(cb){
+        if (__.loaded) return cb()
+        if (__.env.supportNative){
+            document.addEventListener('deviceready', cb, false)
+            __.attachFile('cordova.js', 'js')
+        }else{
+            window.addEventListener('load', cb, false)
+        }
+        __.env.loaded = true
+    },
 	createEvent: function(name, detail, bubbles, cancelable){
 		var evt = document.createEvent('CustomEvent')
 		evt.initCustomEvent(name, bubbles || false, cancelable || false, detail)
@@ -61,3 +72,21 @@ var __ = {
 		}
 	}
 }
+!function(){
+    var
+    env = __.env,
+    te = 'transitionend',
+    wkte = 'webkittransitionend',
+    appVerTag = document.querySelector('meta[name=app-version]')
+
+    env.transitionEnd = __.detectEvent(te) ? te : __.detectEvent(wkte) ? 'webkitTransitionEnd' : undefined
+
+    env.appVer = appVerTag ? appVerTag.getAttribute('content') : '0'
+    env.supportNative = false
+
+    if (-1 === document.URL.indexOf('http://') &&
+        -1 === document.URL.indexOf('https://')){
+        var tag = document.querySelector('meta[name=app-support-native]')
+        env.supportNative = tag ? 'true' === tag.getAttribute('content').toLowerCase() : false
+    }
+}()

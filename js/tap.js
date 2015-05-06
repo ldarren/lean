@@ -21,7 +21,7 @@
         evt = 'tap',
         now = Date.now()
         if (now - lastTap < 500) evt='taps'
-        e.target.dispatchEvent(evt.create(evt, null, true))
+        e.target.dispatchEvent(__.createEvent(evt, null, true))
 
     },
     touchmove = function(e){
