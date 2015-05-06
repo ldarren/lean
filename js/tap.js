@@ -1,5 +1,5 @@
 !function(){
-    if (pico.detectEvent('touchstart')) return
+    if (__.detectEvent('touchstart')) return
 
     var
     cancelled = false,
@@ -8,7 +8,7 @@
     longTap = function(e){
         if (cancelled) return
         cancelled = true
-        e.target.dispatchEvent(pico.createEvent('longTap', null, true))
+        e.target.dispatchEvent(__.createEvent('longTap', null, true))
     }
     touchstart = function(e){
         cancelled = false
@@ -21,7 +21,7 @@
         evt = 'tap',
         now = Date.now()
         if (now - lastTap < 500) evt='taps'
-        e.target.dispatchEvent(pico.createEvent(evt, null, true))
+        e.target.dispatchEvent(evt.create(evt, null, true))
 
     },
     touchmove = function(e){

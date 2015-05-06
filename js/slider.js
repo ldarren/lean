@@ -11,7 +11,7 @@
     function transited(e){
         var ele = e.target
         ele.removeEventListener(transitionend, transited)
-        ele.dispatchEvent(pico.createEvent('transited'))
+        ele.dispatchEvent(__.createEvent('transited'))
     }
     function transit(e){
         var

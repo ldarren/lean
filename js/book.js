@@ -19,12 +19,12 @@
         if (!currPage){
             page.classList.add('lnPage')
             book.appendChild(page)
-            return book.dispatchEvent(pico.createEvent('flipped'))
+            return book.dispatchEvent(__.createEvent('flipped'))
         }
 
         currPage.addEventListener(transitionend, function cb(e){
             currPage.removeEventListener(transitionend, cb)
-            book.dispatchEvent(pico.createEvent('flipped', {page:currPage}))
+            book.dispatchEvent(__.createEvent('flipped', {page:currPage}))
             currPage = undefined
         }, false)
 

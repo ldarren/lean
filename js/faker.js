@@ -1,5 +1,5 @@
 !function(){
-    if (pico.detectEvent('touchstart')) return
+    if (__.detectEvent('touchstart')) return
 
     var
     dispatchTouch = function(e){
