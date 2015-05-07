@@ -1,29 +1,20 @@
 !function(){
-    var transitionend = function(){
-        var
-        tmp = document.createElement('div'),
-        prefixes = ['webkit', 'Moz', 'O', ' ms']
-        for (var i=0,p; p=prefixes[i]; i++){
-            if(('on' + p + 'transitionend') in window) return p+'TransitionEnd'
-        }
-        return 'transitionend'
-    }()
     function flip(e){
         var
         book = e.target,
         page = e.detail.page,
-        currPage = book.querySelector('.lnPage')
+        currPage = book.querySelector('.__page')
 
         if (!book || !page) return
 
         if (!currPage){
-            page.classList.add('lnPage')
+            page.classList.add('__page')
             book.appendChild(page)
             return book.dispatchEvent(__.createEvent('flipped'))
         }
 
-        currPage.addEventListener(transitionend, function cb(e){
-            currPage.removeEventListener(transitionend, cb)
+        currPage.addEventListener(__.env.transitionEnd, function cb(e){
+            currPage.removeEventListener(__.env.transitionEnd, cb)
             book.dispatchEvent(__.createEvent('flipped', {page:currPage}))
             currPage = undefined
         }, false)
@@ -36,7 +27,7 @@
         }
 
         page.style[attr] = px+'px'
-        page.classList.add('lnPage')
+        page.classList.add('__page')
         book.appendChild(page)
 
         page.offsetWidth // reflow
@@ -45,10 +36,10 @@
         currPage.style[attr] = (-px)+'px'
     }
     function reset(){
-        for(var i=0,ss=document.querySelectorAll('.lnBook'),s; s=ss[i]; i++){
+        for(var i=0,ss=document.querySelectorAll('.__book'),s; s=ss[i]; i++){
             s.addEventListener('flip', flip, false)
         }
     }
     reset()
-    document.addEventListener('lnReset', reset, false)
+    document.addEventListener('__reset', reset, false)
 }()

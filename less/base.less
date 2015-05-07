@@ -9,7 +9,7 @@
           box-sizing: border-box;
 }
 
-// We fix position the body and scroll `.lnPage`.
+// We fix position the body and scroll `.__page`.
 body {
   position: fixed;
   top: 0;
@@ -35,7 +35,7 @@ a {
 }
 
 // Wrapper to be used around all content not in .bar-title and .bar-tab
-.lnPage{
+.__page{
     position:absolute;
     top:0;
     left:0;
@@ -51,32 +51,32 @@ a {
 
 // Hack to force all relatively and absolutely positioned elements still render while scrolling
 // Note: This is a bug for "-webkit-overflow-scrolling: touch"
-.lnPage > * {
+.__page > * {
   .transform(translateZ(0));
 }
 
-// Pad top/bottom of.lnPage so it doesn't hide behind bars.
-// Note: For these to work,.lnPage must come after both bars in the markup
-.bar-nav:not(.hidden) ~ .lnPage {
+// Pad top/bottom of.__page so it doesn't hide behind bars.
+// Note: For these to work,.__page must come after both bars in the markup
+.bar-nav:not(.hidden) ~ .__page {
   padding-top: @bar-base-height;
 }
-.bar-header-secondary:not(.hidden) ~ .lnPage {
+.bar-header-secondary:not(.hidden) ~ .__page {
   padding-top: (@bar-base-height*2);
 }
 
 // Footer bar padding
-.bar-footer:not(.hidden) ~ .lnPage {
+.bar-footer:not(.hidden) ~ .__page {
   padding-bottom: @bar-base-height;
 }
-.bar-footer-secondary:not(.hidden) ~ .lnPage {
+.bar-footer-secondary:not(.hidden) ~ .__page {
   padding-bottom: (@bar-base-height*2);
 }
 
 // Tab bar padding
-.bar-tab:not(.hidden) ~ .lnPage {
+.bar-tab:not(.hidden) ~ .__page {
   padding-bottom: @bar-tab-height;
 }
-.bar-footer-secondary-tab:not(.hidden) ~ .lnPage {
+.bar-footer-secondary-tab:not(.hidden) ~ .__page {
   padding-bottom: (@bar-tab-height+@bar-base-height);
 }
 
