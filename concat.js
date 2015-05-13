@@ -25,7 +25,7 @@ fs.readlink(symPath, function(err, realPath){
 				fname = files.shift(),
 				callee = arguments.callee
 
-				if ('.' === fname || '..' === fname) callee(cb)
+				if ('.' === fname[0]) return callee(cb)
 				console.log('appending', fname, '...')
 				var rs = fs.createReadStream(srcDir+fname)
 

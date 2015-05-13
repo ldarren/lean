@@ -1,6 +1,4 @@
 !function(){
-    if (__.detectEvent('touchstart')) return
-
     var
     cancelled = false,
     longTapTimer = 0,
