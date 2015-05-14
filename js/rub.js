@@ -3,7 +3,7 @@
     }
     function reset(){
         for(var i=0,ss=document.querySelectorAll('.__rub'),s; s=ss[i]; i++){
-            s.addEventListener('mousestart', rub, false)
+            s.addEventListener('touchstart', rub, false)
         }
     }
     reset()

@@ -6,7 +6,8 @@ var __ = {
             document.addEventListener('deviceready', cb, false)
             __.attachFile('cordova.js', 'js')
         }else{
-            window.addEventListener('load', cb, false)
+			if ('complete' === document.readyState) return cb()
+            else window.addEventListener('load', cb, false)
         }
         __.env.loaded = true
     },

@@ -36,23 +36,25 @@ a {
 
 // Wrapper to be used around all content not in .bar-title and .bar-tab
 .__page{
-    position:absolute;
-    top:0;
-    left:0;
-    height:100%;
-    width:100%;
-    overflow: auto;
-    background-color: #fff;
-    -webkit-overflow-scrolling: touch;
-    transition:0.5s;
-    -webkit-transition:0.5s;
-    z-index:5;
+	position:absolute;
+	top:0;
+	left:0;
+	height:100%;
+	width:100%;
+	overflow: auto;
+	background-color: #fff;
+	-webkit-overflow-scrolling: touch;
+	transition:0.5s;
+	-webkit-transition:0.5s;
+	z-index:5;
+	pointer-events:auto;
 }
 
 // Hack to force all relatively and absolutely positioned elements still render while scrolling
 // Note: This is a bug for "-webkit-overflow-scrolling: touch"
 .__page > * {
   .transform(translateZ(0));
+  pointer-events:auto;
 }
 
 // Pad top/bottom of.__page so it doesn't hide behind bars.
