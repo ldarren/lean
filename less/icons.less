@@ -16,20 +16,42 @@
 	-webkit-font-smoothing: antialiased;
 }
 
-.glyph:before{
-	position: absolute;
-	top: 50%;
-	display: inline-block;
-	font-family: fontello;
-	font-size: inherit;
-	line-height: 0;
-	color: #bbb;
-	text-decoration: none;
-	.transform(-50%);
-
-	-webkit-font-smoothing: antialiased;
+[class^="glyph-"]:before, [class*=" glyph-"]:before {
+  position: absolute;
+  top: 50%;
+  font-family: "fontello";
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+ 
+  display: inline-block;
+  text-decoration: none;
+  .transform(-50%);
+  width: 1em;
+  margin-right: .2em;
+  color: #bbb;
+  line-height: 0;
+  text-align: center;
+  /* opacity: .8; */
+ 
+  /* For safety - reset parent styles, that can break glyph codes*/
+  font-variant: normal;
+  text-transform: none;
+ 
+  /* Animation center compensation - margins should be symmetric */
+  /* remove if not needed */
+  margin-left: .2em;
+ 
+  /* you can be more comfortable with increased icons size */
+  /* font-size: 120%; */
+ 
+  /* Font smoothing. That was taken from TWBS */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+ 
+  /* Uncomment for 3D effect */
+  /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
 }
-
 .glyph-left:before{
 	left: 15px
 }

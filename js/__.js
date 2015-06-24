@@ -134,6 +134,6 @@ var __ = {
     if (-1 === document.URL.indexOf('http://') &&
         -1 === document.URL.indexOf('https://')){
         var tag = document.querySelector('meta[name=app-support-native]')
-        env.supportNative = tag ? 'true' === tag.getAttribute('content').toLowerCase() : false
+        env.supportNative = tag ? '1' === tag.getAttribute('content').toLowerCase() : false
     }
 }()
