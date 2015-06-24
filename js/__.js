@@ -41,7 +41,8 @@ var __ = {
         xhr.onreadystatechange=function(){
             if (1 < xhr.readyState && cb){
                 var st = xhr.status
-                return cb((200 === st || !st) ? null : new Error("Error["+xhr.statusText+"] Info: "+xhr.responseText), xhr, userData)
+                if (-1 < [301,302,303,305,306,307].indexOf(st)) return __.ajax(method, xhr.getResponseHeader('location'),params,headers,cb,userData)
+                return cb((200 === st || !st) ? null : new Error("Error["+xhr.statusText+"] Info: "+xhr.responseText), xhr, xhr.responseText, userData)
             }
         }
         xhr.onerror=function(evt){cb(evt, xhr, userData)}
@@ -121,11 +122,11 @@ var __ = {
 !function(){
     var
     env = __.env,
+    appVerTag = document.querySelector('meta[name=app-version]'),
     te = 'transitionend',
-    wkte = 'webkittransitionend',
-    appVerTag = document.querySelector('meta[name=app-version]')
+    wkte = 'webkitTransitionEnd'
 
-    env.transitionEnd = __.detectEvent(te) ? te : __.detectEvent(wkte) ? 'webkitTransitionEnd' : undefined
+    env.transitionEnd = __.detectEvent(te) ? te : __.detectEvent(wkte.toLowerCase()) ? wkte : undefined
 
     env.appVer = appVerTag ? appVerTag.getAttribute('content') : '0'
     env.supportNative = false
