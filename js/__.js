@@ -12,10 +12,12 @@ var __ = {
         __.env.loaded = true
     },
 
-    // method: get/post, url: path, params: null/parameters (optional), headers: header parameter, cb: callback, userData: optional
-    ajax: function(method, url, params, headers, cb, userData){
-        cb = cb || dummyCB
+    // method: get/post, url: path, params: null/parameters (optional), opt: {async,un,passwd,headers}, cb: callback, userData: optional
+    ajax: function(method, url, params, opt, cb, userData){
+        cb=cb || dummyCB
         if (!url) return cb(new Error('url not defined'))
+        opt=opt||{}
+
         var
         xhr = XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP'),
         post = 'POST' === (method = method.toUpperCase()),
@@ -36,12 +38,12 @@ var __ = {
             }
         }
 
-        xhr.open(method, url, true)
+        xhr.open(method, url, undefined===opt.async?true:opt.async, opt.un, opt.passwd)
 
         xhr.onreadystatechange=function(){
             if (1 < xhr.readyState && cb){
                 var st = xhr.status
-                if (-1 < [301,302,303,305,306,307].indexOf(st)) return __.ajax(method, xhr.getResponseHeader('location'),params,headers,cb,userData)
+                if (-1 < [301,302,303,305,306,307].indexOf(st)) return __.ajax(method, xhr.getResponseHeader('location'),params,opt,cb,userData)
                 return cb((200 === st || !st) ? null : new Error("Error["+xhr.statusText+"] Info: "+xhr.responseText), xhr, xhr.responseText, userData)
             }
         }
@@ -49,7 +51,8 @@ var __ = {
         // never set Content-Type, it will trigger preflight options and chrome 35 has problem with json type
         //if (post && params && 2 === dataType) xhr.setRequestHeader('Content-Type', 'application/json')
         if (post && params && 3 !== dataType) xhr.setRequestHeader('Content-Type', 'text/plain')
-        for (var key in headers) xhr.setRequestHeader(key, headers[key])
+        var h=opt.headers
+        for (var k in h) xhr.setRequestHeader(k, h[k])
 
         switch(dataType){
         case 1: xhr.send(params); break
