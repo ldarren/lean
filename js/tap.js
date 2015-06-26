@@ -1,5 +1,6 @@
 !function(){
     var
+	move=0,
     cancelled = false,
     longTapTimer = 0,
     lastTap = 0,
@@ -7,23 +8,26 @@
         if (cancelled) return
         cancelled = true
         e.target.dispatchEvent(__.createEvent('longTap', null, true))
-    }
+    },
     touchstart = function(e){
         cancelled = false
-        lastDown = window.setTimeout(longTap, 2000, e)
+		move=0
+        longTapTimer= window.setTimeout(longTap, 2000, e)
     },
     touchend = function(e){
         window.clearTimeout(longTapTimer)
         if (cancelled) return
-        var
-        evt = 'tap',
-        now = Date.now()
-        if (now - lastTap < 500) evt='taps'
-        e.target.dispatchEvent(__.createEvent(evt, null, true))
-
+        var now = Date.now()
+        if (now - lastTap < 300){
+			e.target.dispatchEvent(__.createEvent('taps', null, true))
+			lastTap=0
+		}else{
+			e.target.dispatchEvent(__.createEvent('tap', null, true))
+			lastTap=now
+		}
     },
     touchmove = function(e){
-        cancelled = true 
+		if (++move > 9) cancelled = true 
     },
     touchcancel = function(e){
         cancelled = true

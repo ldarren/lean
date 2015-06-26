@@ -9,6 +9,7 @@
         ele = e.target,
         detail = e.detail,
         dir,dist
+        ele.removeEventListener(__.env.transitionEnd, transited)
         ele.addEventListener(__.env.transitionEnd, transited, false)
         if (!detail) return ele.style.cssText = ''
 
