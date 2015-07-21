@@ -2,62 +2,66 @@
     if (__.detectEvent('touchstart')) return
 
     var
+	md='mousedown',
+	mu='mouseup',
+	mm='mousemove',
+	mo='mouseout',
+	ts='touchstart',
+	te='touchend',
+	tm='touchmove',
+	tc='touchcancel',
     dispatchTouch = function(e){
         var name
 
         switch(e.type){
-        case 'mousedown': name = 'touchstart'; break
-        case 'mouseup': name = 'touchend'; break
-        case 'mousemove': name = 'touchmove'; break
-        case 'mouseout': name = 'touchcancel'; break
+        case md: name = ts; break
+        case mu: name = te; break
+        case mm: name = tm; break
+        case mo: name = tc; break
         default: return console.error('wrong event: '+e.type)
         }
 
         var
         ele = e.target,
-        touches = []
+        touches = [{
+			pageX: e.pageX,
+			pageY: e.pageY,
+			target: ele
+		}],
+		evt=new Event(name, { bubbles: e.bubbles, cancelable: e.cancelable })
 
-        touches[0] = {}
-        touches[0].pageX = e.pageX
-        touches[0].pageY = e.pageY
-        touches[0].target = ele
+		evt.pageX=e.pageX
+		evt.pageY=e.pageY
+		evt.touches=evt.changedTouches=evt.targetTouches= touches
+		evt.mouseToTouch= true
 
-        ele.dispatchEvent(new Event(name, {
-            bubbles: e.bubbles,
-            cancelable: e.cancelable,
-            details:{
-                target: ele,
-                srcElement: e.srcElement,
-                touches: touches,
-                changedTouches: touches,
-                targetTouches: touches,
-                mouseToTouch: true
-            }   
-        }))
+        ele.dispatchEvent(evt)
     },
+	clearAll=function(){
+        document.removeEventListener(md, touchstart)
+        document.removeEventListener(mm, touchmove)
+        document.removeEventListener(mu, touchend)
+        document.removeEventListener(mo, touchcancel)
+	},
     touchstart = function(e){
-        document.removeEventListener('mousedown', touchstart)
-        document.addEventListener('mousemove', touchmove,  true)
-        document.addEventListener('mouseup', touchend,  true)
-        document.addEventListener('mouseout', touchcancel,  true)
+		clearAll()
+        document.addEventListener(mm, touchmove,  true)
+        document.addEventListener(mu, touchend,  true)
+        document.addEventListener(mo, touchcancel,  true)
         dispatchTouch(e)
     },
     touchmove = function(e){
         dispatchTouch(e)
     },
     touchend = function(e){
-        document.addEventListener('mousedown', touchstart,  true)
-        document.removeEventListener('mousemove', touchmove)
-        document.removeEventListener('mouseup', touchend)
-        document.removeEventListener('mouseout', touchcancel)
+		clearAll()
+        document.addEventListener(md, touchstart,  true)
         dispatchTouch(e)
     },
     touchcancel = function(e){
-        document.addEventListener('mousedown', touchstart,  true)
-        document.removeEventListener('mousemove', touchmove)
-        document.removeEventListener('mouseup', touchend)
-        document.removeEventListener('mouseout', touchcancel)
+		clearAll()
+        document.addEventListener(md, touchstart,  true)
         dispatchTouch(e)
     }
-    document.addEventListener('mousedown', touchstart,  true)
+    document.addEventListener(md, touchstart,  true)
 }()
