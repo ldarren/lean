@@ -14,8 +14,8 @@ var __ = {
 
     // method: get/post, url: path, params: null/parameters (optional), opt: {async,un,passwd,headers}, cb: callback, userData: optional
     ajax: function(method, url, params, opt, cb, userData){
-        cb=cb || dummyCB
-        if (!url) return cb(new Error('url not defined'))
+        cb=cb || function(err){if(err)console.error(err)} 
+        if (!url) return cb('url not defined')
         opt=opt||{}
 
         var
@@ -32,7 +32,7 @@ var __ = {
                 switch(dataType){
                 case 1: url += encodeURIComponent(params); break
                 case 2: url += Object.keys(params).reduce(function(a,k){a.push(k+'='+encodeURIComponent(params[k]));return a},[]).join('&'); break
-                case 3: return cb(new Error('FormData with GET method is not supported yet'))
+                case 3: return cb('FormData with GET method is not supported yet')
                 }
                 params = null
             }
@@ -41,13 +41,13 @@ var __ = {
         xhr.open(method, url, undefined===opt.async?true:opt.async, opt.un, opt.passwd)
 
         xhr.onreadystatechange=function(){
-            if (1 < xhr.readyState && cb){
+            if (1 < xhr.readyState){
                 var st = xhr.status
-                if (-1 < [301,302,303,305,306,307].indexOf(st)) return __.ajax(method, xhr.getResponseHeader('location'),params,opt,cb,userData)
-                return cb((200 === st || !st) ? null : new Error("Error["+xhr.statusText+"] Info: "+xhr.responseText), xhr, xhr.responseText, userData)
+                if (-1 < [301,302,303,305,306,307].indexOf(st)) return arguments.callee(method, xhr.getResponseHeader('location'),params,opt,cb,userData)
+                return cb((200 === st || !st) ? null : "Error["+xhr.statusText+"] Info: "+xhr.responseText, xhr.readyState, xhr.responseText, userData)
             }
         }
-        xhr.onerror=function(evt){cb(evt, xhr, userData)}
+        xhr.onerror=function(evt){cb(evt, xhr.readyState, null, userData)}
         // never set Content-Type, it will trigger preflight options and chrome 35 has problem with json type
         //if (post && params && 2 === dataType) xhr.setRequestHeader('Content-Type', 'application/json')
         if (post && params && 3 !== dataType) xhr.setRequestHeader('Content-Type', 'text/plain')
