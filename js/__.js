@@ -11,6 +11,13 @@ var __ = {
         }
         __.env.loaded = true
     },
+	dummyCB:function(){},
+	refChain: function(obj, p){
+		if (!p || !p.length) return obj
+		var o = obj[p.shift()]
+		if (o) return arguments.callee(o, p)
+		return 0
+	}
 
     // method: get/post, url: path, params: null/parameters (optional), opt: {async,un,passwd,headers}, cb: callback, userData: optional
     ajax: function(method, url, params, opt, cb, userData){
