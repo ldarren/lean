@@ -1,10 +1,9 @@
 var __ = {
     env:{},
     onLoad: function(cb){
-        if (__.loaded) return cb()
         if (__.env.supportNative){
             document.addEventListener('deviceready', cb, false)
-            __.attachFile('cordova.js', 'js')
+            if (__.env.loaded) __.attachFile('cordova.js', 'js')
         }else{
 			if ('complete' === document.readyState) return cb()
             else window.addEventListener('load', cb, false)
@@ -17,7 +16,7 @@ var __ = {
 		var o = obj[p.shift()]
 		if (o) return arguments.callee(o, p)
 		return 0
-	}
+	},
 
     // method: get/post, url: path, params: null/parameters (optional), opt: {async,un,passwd,headers}, cb: callback, userData: optional
     ajax: function(method, url, params, opt, cb, userData){

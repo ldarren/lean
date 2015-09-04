@@ -1,9 +1,9 @@
 !function(){
 	__.dialogs={
-		alert:function(msg,title,btn,cb){ alert(msg); (cb||__.dummyCB)() },
-		confirm:function(msg,title,btns,cb){ cb(null,confirm(msg)) },
-		prompt:function(msg,title,btns,comment,cb){ cb(null,prompt(msg,comment)) },
-		beep:function(){}
+		alert:function(msg,title,btn,cb){ setTimeout(function(){alert(msg); (cb||__.dummyCB)()},0) },
+		confirm:function(msg,title,btns,cb){ setTimeout(function(){cb(null,confirm(msg))},0) },
+		prompt:function(msg,title,btns,comment,cb){ setTimeout(function(){cb(null,prompt(msg,comment))},0) },
+		beep:function(){console.log('beep')}
 	}
     function setup(){
 		var n=__.refChain(window,['navigator','notification'])
