@@ -55,7 +55,7 @@
         color:white;
         background-color:rgba(50,50,50,0.3)
     }
-    .lnPage{
+    .__page{
         background-color:yellow;
     }
 </style>
@@ -66,12 +66,11 @@
     <div id=leftDrawer class=hidden></div>
     <div id=rightDrawer class=hidden></div>
 </div>
-<div id=content class="lnBook lnSlider">
-    <div class="header lnSlider lnSurface"><span class="btn menu-left">#</span><span class="btn nav-right">&lt</span><span class="btn nav-left" style="float:right">&gt</span><span class="btn menu-right" style="float:right">#</span></div>
-    <div class="lnPage">Home</div>
+<div id=content class="__book __slider">
+    <div class="header __slider __surface"><span class="btn menu-left">#</span><span class="btn nav-right">&lt</span><span class="btn nav-left" style="float:right">&gt</span><span class="btn menu-right" style="float:right">#</span></div>
+    <div class="__page">Home</div>
 </div>
 
-<script src="lib/pico/pico.js"></script>
 <script src="lib/lean/lean.js"></script>
 <script>
     var
@@ -83,10 +82,10 @@
     isOpened = false
 
     function toggleHeader(e){
-        header.dispatchEvent(pico.createEvent('transit', hasHeader ? {from:'bottom', ref:header} : undefined))
+        header.dispatchEvent(__.createEvent('transit', hasHeader ? {from:'bottom', ref:header} : undefined))
         hasHeader = !hasHeader
     }
-    content.querySelector('.lnPage').addEventListener('touchstart', toggleHeader, false)
+    content.querySelector('.__page').addEventListener('touchstart', toggleHeader, false)
     content.addEventListener('transited', function(e){
         if (isOpened) return false
         leftDrawer.classList.add('hidden')
@@ -94,35 +93,35 @@
     }, false)
     header.querySelector('.btn.menu-left').addEventListener('touchstart', function(){
         if (isOpened){
-            content.dispatchEvent(pico.createEvent('transit'))
+            content.dispatchEvent(__.createEvent('transit'))
             isOpened = false
             return
         }
         isOpened = true
         leftDrawer.classList.remove('hidden')
-        content.dispatchEvent(pico.createEvent('transit', {from:'left', ref:leftDrawer}))
+        content.dispatchEvent(__.createEvent('transit', {from:'left', ref:leftDrawer}))
     }, false)
     header.querySelector('.btn.menu-right').addEventListener('touchstart', function(){
         if (isOpened){
-            content.dispatchEvent(pico.createEvent('transit'))
+            content.dispatchEvent(__.createEvent('transit'))
             isOpened = false 
             return
         }
         isOpened = true
         rightDrawer.classList.remove('hidden')
-        content.dispatchEvent(pico.createEvent('transit', {from:'right', ref:rightDrawer}))
+        content.dispatchEvent(__.createEvent('transit', {from:'right', ref:rightDrawer}))
     }, false)
     header.querySelector('.btn.nav-left').addEventListener('touchstart', function(){
         var page = document.createElement('div')
         page.textContent = 'left '+Date.now()
         page.addEventListener('touchstart', toggleHeader, false)
-        content.dispatchEvent(pico.createEvent('flip', {page:page, from:'left'}))
+        content.dispatchEvent(__.createEvent('flip', {page:page, from:'left'}))
     }, false)
     header.querySelector('.btn.nav-right').addEventListener('touchstart', function(){
         var page = document.createElement('div')
         page.textContent = 'right'+Date.now()
         page.addEventListener('touchstart', toggleHeader, false)
-        content.dispatchEvent(pico.createEvent('flip', {page:page, from:'right'}))
+        content.dispatchEvent(__.createEvent('flip', {page:page, from:'right'}))
     }, false)
 </script>
 </body>
