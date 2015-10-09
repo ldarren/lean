@@ -1,11 +1,8 @@
-lean
-====
+#lean
+lean browser utilities
 
-lean ui, it is derived from the excellent Ratchet components.
-
-The changes are:
-* use less instead of scss
-* integrated fontella fontsheet
+#Features
+* merge mouse and touches
 * integrated pageslider
 * integrated snap
 * integrated slidr

@@ -1,9 +1,14 @@
+// TODO: swipe, https://github.com/madrobby/zepto/blob/master/src/touch.js
 !function(){
     var
-	move=0,
+	startXY,
+    lastXY,
     cancelled = false,
     longTapTimer = 0,
     lastTap = 0,
+    getXY=function(touch){
+        return [touch.pageX,touch.pageY]
+    },
     longTap = function(e){
         if (cancelled) return
         cancelled = true
@@ -11,7 +16,7 @@
     },
     touchstart = function(e){
         cancelled = false
-		move=0
+		lastXY=startXY=getXY(e.touches[0])
         longTapTimer= window.setTimeout(longTap, 2000, e)
     },
     touchend = function(e){
@@ -27,7 +32,13 @@
 		}
     },
     touchmove = function(e){
-		if (++move > 9) cancelled = true 
+        var xy=getXY(e.touches[0])
+        if (cancelled){
+		    if (xy[0]>lastXY[0]+9 || xy[1]>lastXY[1]+9) e.target.dispatchEvent(__.createEvent('rub',[xy[0]-lastXY[0],xy[1]-lastXY[1]],true))
+        }else{
+		    if (xy[0]>startXY[0]+9 || xy[1]>startXY[1]+9) cancelled = true
+        }
+        lastXY=xy
     },
     touchcancel = function(e){
         cancelled = true

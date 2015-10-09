@@ -1,0 +1,26 @@
+{
+  "name": "lean",
+  "version": "0.0.1",
+  "description": "javascript browser utilities",
+  "main": "lean.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "node tests.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ldarren/lean.git"
+  },
+  "keywords": [
+    "functional",
+    "ui"
+  ],
+  "author": "Darren Liew",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ldarren/lean/issues"
+  },
+  "homepage": "https://github.com/ldarren/lean#readme"
+}
