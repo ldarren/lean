@@ -51,7 +51,7 @@ var __ = {
             if (1 < xhr.readyState){
                 var st = xhr.status
                 if (-1 < [301,302,303,305,306,307].indexOf(st)) return arguments.callee(method, xhr.getResponseHeader('location'),params,opt,cb,userData)
-                return cb((200 === st || !st) ? null : "Error["+xhr.statusText+"] Info: "+xhr.responseText, xhr.readyState, xhr.responseText, userData)
+                return cb((200 === st || !st) ? null : xhr.statusText, xhr.readyState, xhr.responseText, userData)
             }
         }
         xhr.onerror=function(evt){cb(evt, xhr.readyState, null, userData)}
