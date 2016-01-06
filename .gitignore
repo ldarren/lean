@@ -24,6 +24,7 @@ build/Release
 lean.css
 lean.css.map
 lean.js
+lean.js.map
 
 # Dependency directory
 # Deployed apps should consider commenting this line out:
