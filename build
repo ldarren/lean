@@ -1,2 +1,19 @@
-#!/usr/bin/env bash
-lessc -x --source-map less/index.less lean.css
+#!/usr/bin/env node
+const
+target='./lean.css'
+
+var
+fs=require('fs'),
+CleanCSS = require('clean-css'),
+src= '@import "css/index.css";'
+
+new CleanCSS({sourceMap:true,target:target}).minify(src, (err, minified)=>{
+    if (err) return console.error(err)
+    fs.writeFile(target, minified.styles, 'utf8', (err)=>{
+        if (err) return console.error(err)
+        fs.writeFile(target+'.map', minified.sourceMap.toString(), 'utf8', (err)=>{
+            if (err) return console.error(err)
+            console.log('done')
+        })
+    })
+})

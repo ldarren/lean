@@ -1,6 +1,6 @@
 {
   "name": "lean",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "javascript browser utilities",
   "main": "lean.js",
   "directories": {
@@ -22,5 +22,9 @@
   "bugs": {
     "url": "https://github.com/ldarren/lean/issues"
   },
-  "homepage": "https://github.com/ldarren/lean#readme"
+  "homepage": "https://github.com/ldarren/lean#readme",
+  "dependencies": {
+    "clean-css": "^3.4.9",
+    "uglify-js": "^2.6.1"
+  }
 }

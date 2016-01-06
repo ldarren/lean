@@ -3,6 +3,7 @@
 var
 fs = require('fs'),
 path = require('path'),
+uglify= require('uglify-js'),
 symPath = process.argv[1],
 dest = path.sep + (process.argv[2] || 'output.js'),
 srcDir = path.sep + (process.argv[3] || 'js') + path.sep
@@ -32,7 +33,14 @@ fs.readlink(symPath, function(err, realPath){
 				rs.on('close', function(){ callee(cb) })
 				rs.pipe(ws, {end:false})
 			})(function(){
-                console.log('Done!')
+                var min=uglify.minify(dest,{outSourceMap:dest+'.map'})
+                fs.writeFile(dest, min.code, 'utf8', (err)=>{
+                    if (err) return console.error(err)
+                    fs.writeFile(dest+'.map', min.map, 'utf8', (err)=>{
+                        if (err) return console.error(err)
+                        console.log('Done!')
+                    })
+                })
             })  
 		})      
 	})
