@@ -1,0 +1,36 @@
+@keyframes __desktopView{
+	from { clip: rect(1px, auto, auto, auto); }
+	to { clip: rect(0px, auto, auto, auto); }
+}
+.__flyer{
+	margin:auto;
+	width: 30rem;
+	height: 53rem;
+	overflow: hidden;
+	animation-duration: 0.001s;
+	animation-name: __desktopView;
+}
+@media(max-width:481px){
+@keyframes __phoneView{
+	from { clip: rect(1px, auto, auto, auto); }
+	to { clip: rect(0px, auto, auto, auto); }
+}
+.__flyer{
+	width: 100%;
+	height: 100%;
+	animation-name: __phoneView;
+}
+}
+@media (min-width:481px) and (max-width:961px){
+@keyframes __tabletView{
+	from { clip: rect(1px, auto, auto, auto); }
+	to { clip: rect(0px, auto, auto, auto); }
+}
+.__flyer{
+	width: 100%;
+	height: 100%;
+	animation-name: __tabletView;
+}
+}
+.__page{
+}
