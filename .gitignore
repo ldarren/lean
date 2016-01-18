@@ -21,10 +21,9 @@ coverage
 
 # Compiled binary addons (http://nodejs.org/api/addons.html)
 build/Release
-lean.css
-lean.css.map
-lean.js
-lean.js.map
+lean.css*
+lean.js*
+lean.min.js*
 
 # Dependency directory
 # Deployed apps should consider commenting this line out:

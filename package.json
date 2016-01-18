@@ -23,7 +23,7 @@
     "url": "https://github.com/ldarren/lean/issues"
   },
   "homepage": "https://github.com/ldarren/lean#readme",
-  "dependencies": {
+  "devDependencies": {
     "clean-css": "^3.4.9",
     "uglify-js": "^2.6.1"
   }
