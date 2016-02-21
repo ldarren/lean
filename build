@@ -1,13 +1,12 @@
 #!/usr/bin/env node
-const
-target='./lean.css'
+const target=process.argv[3] || './lean.css'
 
 var
 fs=require('fs'),
 CleanCSS = require('clean-css'),
-src= '@import "css/index.css";'
+src= `@import ${process.argv[2] || "css/index.css"};`
 
-new CleanCSS({sourceMap:true,target:target}).minify(src, (err, minified)=>{
+new CleanCSS({rebase:false,sourceMap:true,target:target}).minify(src, (err, minified)=>{
     if (err) return console.error(err)
     fs.writeFile(target, minified.styles, 'utf8', (err)=>{
         if (err) return console.error(err)
