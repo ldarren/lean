@@ -18,7 +18,9 @@ var __ = {
 		if (o) return arguments.callee(o, p)
 		return 0
 	},
-
+	querystring: function(obj){
+		return Object.keys(obj).reduce(function(a,k){a.push(k+'='+encodeURIComponent(obj[k]));return a},[]).join('&')
+	},
     // method: get/post, url: path, params: null/parameters (optional), opt: {async,un,passwd,headers}, cb: callback, userData: optional
     ajax: function(method, url, params, opt, cb, userData){
         cb=cb || function(err){if(err)console.error(err)} 
@@ -38,7 +40,7 @@ var __ = {
                 url += '&'
                 switch(dataType){
                 case 1: url += encodeURIComponent(params); break
-                case 2: url += Object.keys(params).reduce(function(a,k){a.push(k+'='+encodeURIComponent(params[k]));return a},[]).join('&'); break
+                case 2: url += __.querystring(params); break
                 case 3: return cb('FormData with GET method is not supported yet')
                 }
                 params = null
