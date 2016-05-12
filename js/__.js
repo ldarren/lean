@@ -53,10 +53,10 @@ var __ = {
             if (1 < xhr.readyState){
                 var st = xhr.status
                 if (-1 < [301,302,303,305,306,307].indexOf(st)) return arguments.callee(method, xhr.getResponseHeader('location'),params,opt,cb,userData)
-                return cb((200 === st || !st) ? null : xhr.statusText, xhr.readyState, xhr.responseText, userData)
+                return cb((200 === st || !st) ? null : {error:xhr.statusText,code:xhr.status}, xhr.readyState, xhr.responseText, userData)
             }
         }
-        xhr.onerror=function(evt){cb(evt, xhr.readyState, null, userData)}
+        xhr.onerror=function(evt){cb({error:xhr.statusText,code:xhr.status}, xhr.readyState, null, userData)}
         // never set Content-Type, it will trigger preflight options and chrome 35 has problem with json type
         //if (post && params && 2 === dataType) xhr.setRequestHeader('Content-Type', 'application/json')
         if (post && params && 3 !== dataType) xhr.setRequestHeader('Content-Type', 'text/plain')
@@ -106,7 +106,7 @@ var __ = {
 			ref.setAttribute('rel', 'stylesheet')
 			ref.setAttribute('href', url)
 			h.insertBefore(ref, h.lastChild)
-			return setTimeout(cb, 500)
+			return setTimeout(cb, 0)
 		default: return cb()
 		}
 	},

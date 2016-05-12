@@ -10,12 +10,12 @@
         if (!currPage){
             page.classList.add('__page')
             book.appendChild(page)
-            return book.dispatchEvent(__.createEvent('flipped'))
+            return book.dispatchEvent(__.createEvent('__flipped'))
         }
 
         currPage.addEventListener(__.env.transitionEnd, function cb(e){
             currPage.removeEventListener(__.env.transitionEnd, cb)
-            book.dispatchEvent(__.createEvent('flipped', {page:currPage}))
+            book.dispatchEvent(__.createEvent('__flipped', {page:currPage}))
             currPage = undefined
         }, false)
 
@@ -37,7 +37,7 @@
     }
     function reset(){
         for(var i=0,ss=document.querySelectorAll('.__book'),s; s=ss[i]; i++){
-            s.addEventListener('flip', flip, false)
+            s.addEventListener('__flip', flip, false)
         }
     }
     reset()

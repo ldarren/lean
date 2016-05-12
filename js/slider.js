@@ -2,7 +2,7 @@
     function transited(e){
         var ele = e.target
         ele.removeEventListener(__.env.transitionEnd, transited)
-        ele.dispatchEvent(__.createEvent('transited'))
+        ele.dispatchEvent(__.createEvent('__transited'))
     }
     function transit(e){
         var
@@ -24,7 +24,7 @@
     }
     function reset(){
         for(var i=0,ss=document.querySelectorAll('.__slider'),s; s=ss[i]; i++){
-            s.addEventListener('transit', transit, false)
+            s.addEventListener('__transit', transit, false)
         }
     }
     reset()
