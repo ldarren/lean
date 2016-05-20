@@ -53,8 +53,8 @@ var __ = {
             if (1 < xhr.readyState){
                 var
 				st = xhr.status,
-				loc=xhr.getResponseHeader('location')
-                if (st>=300 && st<400 && loc) return __.ajax(method,loc,params,opt,cb,userData)
+				loc
+                if (st>=300 && st<400 && (loc=xhr.getResponseHeader('location'))) return __.ajax(method,loc,params,opt,cb,userData)
                 return cb((300>st || !st) ? null : {error:xhr.statusText,code:xhr.status},xhr.readyState,xhr.responseText,userData)
             }
         }
