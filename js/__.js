@@ -51,12 +51,14 @@ var __ = {
 
         xhr.onreadystatechange=function(){
             if (1 < xhr.readyState){
-                var st = xhr.status
-                if (-1 < [301,302,303,305,306,307].indexOf(st)) return arguments.callee(method, xhr.getResponseHeader('location'),params,opt,cb,userData)
-                return cb((200 === st || !st) ? null : {error:xhr.statusText,code:xhr.status}, xhr.readyState, xhr.responseText, userData)
+                var
+				st = xhr.status,
+				loc=xhr.getResponseHeader('location')
+                if (st>=300 && st<400 && loc) return __.ajax(method,loc,params,opt,cb,userData)
+                return cb((300>st || !st) ? null : {error:xhr.statusText,code:xhr.status},xhr.readyState,xhr.responseText,userData)
             }
         }
-        xhr.onerror=function(evt){cb({error:xhr.statusText,code:xhr.status}, xhr.readyState, null, userData)}
+        xhr.onerror=function(evt){cb({error:xhr.statusText,code:xhr.status,params:arguments}, xhr.readyState, null, userData)}
         // never set Content-Type, it will trigger preflight options and chrome 35 has problem with json type
         //if (post && params && 2 === dataType) xhr.setRequestHeader('Content-Type', 'application/json')
         if (post && params && 3 !== dataType) xhr.setRequestHeader('Content-Type', 'text/plain')
