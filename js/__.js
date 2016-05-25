@@ -19,7 +19,7 @@ var __ = {
 		return 0
 	},
 	querystring: function(obj){
-		return Object.keys(obj).reduce(function(a,k){a.push(k+'='+encodeURIComponent(obj[k]));return a},[]).join('&')
+		return Object.keys(obj).reduce(function(a,k){a.push(encodeURIComponent(k)+'='+encodeURIComponent(obj[k]));return a},[]).join('&')
 	},
     // method: get/post, url: path, params: null/parameters (optional), opt: {async,un,passwd,headers}, cb: callback, userData: optional
     ajax: function(method, url, params, opt, cb, userData){
