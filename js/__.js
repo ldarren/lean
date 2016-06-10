@@ -142,6 +142,10 @@ var __ = {
 
     env.transitionEnd = __.detectEvent(te) ? te : __.detectEvent(wkte.toLowerCase()) ? wkte : undefined
 
+    env.supportPassive=false
+    try { window.addEventListener('t', null, Object.defineProperty({}, 'passive', {get:function(){env.supportPassive=true}})) }
+    catch (e) {}
+
     env.appVer = appVerTag ? appVerTag.getAttribute('content') : '0'
     env.supportNative = false
 

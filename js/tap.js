@@ -3,6 +3,7 @@
     var
 	startXY,
     lastXY,
+    opt=__.env.supportPassive?{capture:true,passive:true}:true,
     cancelled = false,
     longTapTimer = 0,
     lastTap = 0,
@@ -44,8 +45,8 @@
         cancelled = true
         window.clearTimeout(longTapTimer)
     }
-    document.addEventListener('touchstart', touchstart,  true)
-    document.addEventListener('touchend', touchend,  true)
-    document.addEventListener('touchmove', touchmove,  true)
-    document.addEventListener('touchcancel', touchcancel,  true)
+    document.addEventListener('touchstart', touchstart,  opt)
+    document.addEventListener('touchend', touchend,  opt)
+    document.addEventListener('touchmove', touchmove,  opt)
+    document.addEventListener('touchcancel', touchcancel,  opt)
 }()

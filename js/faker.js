@@ -2,6 +2,7 @@
     if (__.detectEvent('touchstart')) return
 
     var
+    opt=__.env.supportPassive?{capture:true,passive:true}:true,
 	md='mousedown',
 	mu='mouseup',
 	mm='mousemove',
@@ -45,9 +46,9 @@
 	},
     touchstart = function(e){
 		clearAll()
-        document.addEventListener(mm, touchmove,  true)
-        document.addEventListener(mu, touchend,  true)
-        document.addEventListener(mo, touchcancel,  true)
+        document.addEventListener(mm, touchmove,  opt)
+        document.addEventListener(mu, touchend,  opt)
+        document.addEventListener(mo, touchcancel,  opt)
         dispatchTouch(e)
     },
     touchmove = function(e){
@@ -55,13 +56,13 @@
     },
     touchend = function(e){
 		clearAll()
-        document.addEventListener(md, touchstart,  true)
+        document.addEventListener(md, touchstart,  opt)
         dispatchTouch(e)
     },
     touchcancel = function(e){
 		clearAll()
-        document.addEventListener(md, touchstart,  true)
+        document.addEventListener(md, touchstart,  opt)
         dispatchTouch(e)
     }
-    document.addEventListener(md, touchstart,  true)
+    document.addEventListener(md, touchstart,  opt)
 }()
