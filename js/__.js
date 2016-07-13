@@ -4,7 +4,7 @@ var __ = {
     onLoad: function(cb){
         if (__.env.supportNative){
             document.addEventListener('deviceready', cb, false)
-            if (__.env.loaded) __.attachFile('cordova.js', 'js')
+            if (__.env.loaded) __.dom.link('cordova.js', 'js')
         }else{
 			if ('complete' === document.readyState) return cb()
             else window.addEventListener('load', cb, false)
