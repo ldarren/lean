@@ -21,16 +21,23 @@ var __ = {
 	querystring: function(obj){
 		return Object.keys(obj).reduce(function(a,k){a.push(encodeURIComponent(k)+'='+encodeURIComponent(obj[k]));return a},[]).join('&')
 	},
-    // method: get/post, url: path, params: null/parameters (optional), opt: {async,un,passwd,headers}, cb: callback, userData: optional
+    // method: get/post,
+	// url: path, 
+	// params: null/parameters (optional),
+	// opt: {responseType,async,un,passwd,headers} (optional),
+	// cb: callback(err, state, res, userData),
+	// userData: optional
     ajax: function(method, url, params, opt, cb, userData){
         cb=cb || function(err){if(err)console.error(err)} 
         if (!url) return cb('url not defined')
         opt=opt||{}
 
         var
-        xhr = XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP'),
+        xhr = new XMLHttpRequest(),
         post = 'POST' === (method = method.toUpperCase()),
         dataType = ('string' === typeof params ? 1 : (params instanceof FormData ? 3 : 2))
+
+		xhr.responseType=opt.responseType||''
 
         url = encodeURI(url)
 
@@ -55,7 +62,7 @@ var __ = {
 				st = xhr.status,
 				loc
                 if (st>=300 && st<400 && (loc=xhr.getResponseHeader('location'))) return __.ajax(method,loc,params,opt,cb,userData)
-                return cb((300>st || !st) ? null : {error:xhr.statusText,code:xhr.status},xhr.readyState,xhr.responseText,userData)
+                return cb((300>st || !st) ? null : {error:xhr.statusText,code:xhr.status},xhr.readyState,xhr.response,userData)
             }
         }
         xhr.onerror=function(evt){cb({error:xhr.statusText,code:xhr.status,params:arguments}, xhr.readyState, null, userData)}
