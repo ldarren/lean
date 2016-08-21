@@ -37,8 +37,6 @@ var __ = {
         post = 'POST' === (method = method.toUpperCase()),
         dataType = ('string' === typeof params ? 1 : (params instanceof FormData ? 3 : 2))
 
-		xhr.responseType=opt.responseType||''
-
         url = encodeURI(url)
 
         if (!post){
@@ -56,11 +54,11 @@ var __ = {
 
         xhr.open(method, url, undefined===opt.async?true:opt.async, opt.un, opt.passwd)
 
+		if(opt.responseType)xhr.responseType=opt.responseType
+
         xhr.onreadystatechange=function(){
             if (1 < xhr.readyState){
-                var
-				st = xhr.status,
-				loc
+                var st = xhr.status, loc
                 if (st>=300 && st<400 && (loc=xhr.getResponseHeader('location'))) return __.ajax(method,loc,params,opt,cb,userData)
                 return cb((300>st || !st) ? null : {error:xhr.statusText,code:xhr.status},xhr.readyState,xhr.response,userData)
             }
@@ -117,6 +115,19 @@ var __ = {
     if (-1 === document.URL.indexOf('http://') &&
         -1 === document.URL.indexOf('https://')){
         var tag = document.querySelector('meta[name=app-support-native]')
-        env.supportNative = tag ? '1' === tag.getAttribute('content').toLowerCase() : false
+        env.supportNative = tag ? '1' === tag.getAttribute('content') : false
     }
+
+	// polyfill custom event
+	if ('function'!==typeof window.CustomEvent){
+		function CustomEvent ( name, params ) {
+			params = params || {bubbles: false, cancelable: false}
+			var evt = document.createEvent('CustomEvent')
+			evt.initCustomEvent( name, params.bubbles, params.cancelable, params.detail )
+			return evt
+		}
+
+		CustomEvent.prototype = window.Event.prototype
+		window.CustomEvent = CustomEvent
+	}
 }()
