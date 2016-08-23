@@ -117,17 +117,4 @@ var __ = {
         var tag = document.querySelector('meta[name=app-support-native]')
         env.supportNative = tag ? '1' === tag.getAttribute('content') : false
     }
-
-	// polyfill custom event
-	if ('function'!==typeof window.CustomEvent){
-		function CustomEvent ( name, params ) {
-			params = params || {bubbles: false, cancelable: false}
-			var evt = document.createEvent('CustomEvent')
-			evt.initCustomEvent( name, params.bubbles, params.cancelable, params.detail )
-			return evt
-		}
-
-		CustomEvent.prototype = window.Event.prototype
-		window.CustomEvent = CustomEvent
-	}
 }()

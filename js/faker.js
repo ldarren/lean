@@ -29,7 +29,7 @@
 			pageY: e.pageY,
 			target: ele
 		}],
-		evt=new CustomEvent(name, { bubbles: e.bubbles, cancelable: e.cancelable })
+		evt=__.createEvent(name, null, e.bubbles, e.cancelable)
 
 		evt.pageX=e.pageX
 		evt.pageY=e.pageY
