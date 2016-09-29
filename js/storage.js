@@ -1,42 +1,81 @@
 !function(){
     function setup(){
 		var
-		n=__.refChain(window,['sqlitePlugin']),
+		sp=__.refChain(window,['sqlitePlugin']),
+		od=__.refChain(window,['openDatabase']),
 		db
-		if (n) {
-			db=n.openDatabase({name:'localstorage.db', location:'default'})
-			db.executeSql('CREATE TABLE IF NOT EXISTS kv (key TEXT UNIQUE NOT NULL, value TEXT);', console.log, console.error)
+
+		if (sp || od){
+			if (sp) db=sp.openDatabase({name:'localstorage.db', location:'default'})
+			else db=openDatabase('localstorage.db', '1.0', 'fake local storage', 50 * 1024 * 1024)
+			db.transaction(function(tx){
+				tx.executeSql('CREATE TABLE IF NOT EXISTS kv (key TEXT UNIQUE NOT NULL, val TEXT);', function(tx,res){
+					console.log(res)
+				}, function(tx,err){
+					console.error(err)
+				})
+			})
 			__.storage={
 				key:function(idx,cb){
-					db.executeSql('SELECT key FROM KV order by oid ASC;', [], function(res){
-						var rows=res.rows.item
-						if (rows.length <= idx) return cb()
-						cb(null,rows(idx).key)
-					}, cb)
+					db.readTransaction(function(tx){
+						tx.executeSql('SELECT key FROM KV order by oid ASC;', [], function(tx,res){
+							var rows=res.rows
+							if (rows.length <= idx) return cb()
+							cb(null,rows[idx].key)
+						}, function(tx,err){
+							cb(err)
+						})
+					})
 				},
 				getItem:function(key,cb){
-					db.executeSql('SELECT value FROM kv WHERE key=?;', [key], function(res){
-						cb(null,res.rows.item(0).value)
-					}, cb)
+					db.readTransaction(function(tx){
+						tx.executeSql('SELECT val FROM kv WHERE key=?;', [key], function(tx,res){
+							if (!res.rows.length) return cb()
+							cb(null,res.rows[0].val)
+						}, function(tx,err){
+							cb(err)
+						})
+					})
 				},
 				setItem:function(key,val,cb){
-					db.executeSql('INSERT OR REPLACE INTO kv (key,val) VALUES (?, ?);', [key,val], cb, cb)
+					db.transaction(function(tx){
+						tx.executeSql('INSERT OR REPLACE INTO kv (oid,key,val) VALUES ((SELECT oid FROM kv WHERE key=?), ?, ?);',
+						[key,key,val],
+						function(tx,res){
+							cb(null, res.insertId)
+						}, function(tx,err){
+							cb(err)
+						})
+					})
 				},
 				removeItem:function(key,cb){
 					cb=cb||__.dummyCB
-					db.executeSql('DELETE FROM kv WHERE key=?;', [key], cb, cb)
+					db.transaction(function(tx){
+						tx.executeSql('DELETE FROM kv WHERE key=?;', [key], function(tx,res){
+							cb()
+						}, function(tx,err){
+							cb(err)
+						})
+					})
 				},
 				clear:function(cb){
 					cb=cb||__.dummyCB
-					db.sqlBatch([
-						'DELETE FROM kv;',
-						'VACUUM;'
-					],cb,cb)
+					db.transaction(function(tx){
+						tx.executeSql('DELETE FROM kv;',null,function(tx,res){
+							cb()
+						},function(tx,err){
+							cb(err)
+						})
+					})
 				},
 				length:function(cb){
-					db.executeSql('SELECT count(*) AS len FROM KV;', [], function(res){
-						cb(null,res.rows.item(0).len)
-					}, cb)
+					db.readTransaction(function(tx){
+						tx.executeSql('SELECT count(*) AS len FROM KV;', [], function(tx,res){
+							cb(null,res.rows[0].len)
+						}, function(tx,err){
+							cb(err)
+						})
+					})
 				}
 			}
 		}else{
