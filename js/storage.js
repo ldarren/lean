@@ -10,9 +10,7 @@
 			if (sp) db=sp.openDatabase({name:'localstorage.db', location:'default'})
 			else db=openDatabase('localstorage.db', '1.0', 'lean local storage emulator', 50 * 1024 * 1024)
 			db.transaction(function(tx){
-				tx.executeSql('CREATE TABLE IF NOT EXISTS kv (key TEXT UNIQUE NOT NULL, val TEXT);', null, function(tx,res){
-					console.log(res)
-				}, function(tx,err){
+				tx.executeSql('CREATE TABLE IF NOT EXISTS kv (key TEXT UNIQUE NOT NULL, val TEXT);', null, null, function(tx,err){
 					console.error(err)
 				})
 			})
