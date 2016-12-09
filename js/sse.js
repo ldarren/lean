@@ -1,7 +1,7 @@
 // adapted from https://github.com/remy/polyfills/blob/master/EventSource.js
 ;(function (global) {
 
-	//if (global.EventSource) return
+	if (global.EventSource) return
 
 	var
 	reTrim = /^(\s|\u00A0)+|(\s|\u00A0)+$/g,
