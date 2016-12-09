@@ -40,7 +40,7 @@ var __ = {
         url = encodeURI(url)
 
         if (!post){
-            url += '?appVer='+__.env.appVer
+            url += (-1===url.indexOf('?')?'?':'&')+'appVer='+__.env.appVer||0
             if (params){
                 url += '&'
                 switch(dataType){
@@ -54,7 +54,8 @@ var __ = {
 
         xhr.open(method, url, undefined===opt.async?true:opt.async, opt.un, opt.passwd)
 
-		if(opt.responseType)xhr.responseType=opt.responseType
+		xhr.timeout=opt.timeout||0
+		xhr.responseType=opt.responseType||''
 
         xhr.onreadystatechange=function(){
             if (1 < xhr.readyState){
@@ -63,7 +64,9 @@ var __ = {
                 return cb((300>st || !st) ? null : {error:xhr.statusText,code:xhr.status},xhr.readyState,xhr.response,userData)
             }
         }
-        xhr.onerror=function(evt){cb({error:xhr.statusText,code:xhr.status,params:arguments}, xhr.readyState, null, userData)}
+        xhr.ontimeout=xhr.onerror=function(evt){
+			cb({error:xhr.statusText,code:xhr.status,params:arguments}, xhr.readyState, null, userData)
+		}
         // never set Content-Type, it will trigger preflight options and chrome 35 has problem with json type
         //if (post && params && 2 === dataType) xhr.setRequestHeader('Content-Type', 'application/json')
         if (post && params && 3 !== dataType) xhr.setRequestHeader('Content-Type', 'text/plain')
@@ -75,6 +78,7 @@ var __ = {
         case 2: xhr.send(JSON.stringify(params)); break
         case 3: xhr.send(params); break
         }
+		return xhr
     },
 	createEvent: function(name, detail, bubbles, cancelable){
 		var evt = document.createEvent('CustomEvent')
