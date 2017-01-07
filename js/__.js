@@ -12,10 +12,10 @@ var __ = {
         __.env.loaded = true
     },
 	dummyCB:function(){},
-	refChain: function(obj, p){
+	refChain: function refChain(obj, p){
 		if (!p || !p.length) return obj
 		var o = obj[p.shift()]
-		if (o) return arguments.callee(o, p)
+		if (o) return refChain(o, p)
 		return 0
 	},
 	querystring: function(obj){
