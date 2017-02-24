@@ -2,18 +2,28 @@
 var __ = {
     env:{},
     onLoad: function(cb){
+console.log('onLoad',__.env.supportNative,!__.env.loaded)
 		__.onReady(cb)
-        if (__.env.supportNative && !__.env.loaded) __.dom.link('cordova.js', 'js')
+        if (__.env.supportNative && !__.env.loaded){console.log('link cordova.js'); __.dom.link('cordova.js', 'js')}
         __.env.loaded = true
     },
-	onReady: function(cb){
-        if (__.env.supportNative){
-            document.addEventListener('deviceready', cb, false)
-        }else{
-			if ('complete' === document.readyState) return cb()
-            else window.addEventListener('load', cb, false)
-        }
-	},
+	onReady: (function(cbs){
+		return function(cb){
+			if (__.env.supportNative){
+				cbs.push(cb)
+console.log('cbs.length',cbs.length)
+				document.addEventListener('deviceready', function(){
+console.log('devicereadied',cbs.length)
+					for(var i=0,c; c=cbs[i]; i++) {console.log('setup',i);c()}
+					cbs.length=0
+console.log('cbs.length',cbs.length)
+				}, false)
+			}else{
+				if ('complete' === document.readyState) return cb()
+				else window.addEventListener('load', cb, false)
+			}
+		}
+	})([]),
 	dummyCB:function(){},
 	refChain: function refChain(obj, p){
 		if (!p || !p.length) return obj

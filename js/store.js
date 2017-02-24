@@ -1,5 +1,6 @@
 !function(){
     function setup(){
+console.log('store setup')
 		var
 		sp=__.refChain(window,['sqlitePlugin']),
 		od=__.refChain(window,['openDatabase']),
