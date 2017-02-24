@@ -113,5 +113,5 @@
 			return dbs[name] = dbs[name] || new store(name)
 		}
     }
-	__.onLoad(setup)
+	__.onReady(setup)
 }()

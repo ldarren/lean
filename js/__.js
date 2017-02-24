@@ -2,15 +2,18 @@
 var __ = {
     env:{},
     onLoad: function(cb){
+		__.onReady(cb)
+        if (__.env.supportNative && !__.env.loaded) __.dom.link('cordova.js', 'js')
+        __.env.loaded = true
+    },
+	onReady: function(cb){
         if (__.env.supportNative){
             document.addEventListener('deviceready', cb, false)
-            if (__.env.loaded) __.dom.link('cordova.js', 'js')
         }else{
 			if ('complete' === document.readyState) return cb()
             else window.addEventListener('load', cb, false)
         }
-        __.env.loaded = true
-    },
+	},
 	dummyCB:function(){},
 	refChain: function refChain(obj, p){
 		if (!p || !p.length) return obj

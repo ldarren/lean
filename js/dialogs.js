@@ -20,5 +20,5 @@
 			}
 		}
     }
-	__.onLoad(setup)
+	__.onReady(setup)
 }()
