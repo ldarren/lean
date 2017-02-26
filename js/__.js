@@ -10,13 +10,15 @@ var __ = {
 			if ('complete' === document.readyState) return readyCB()
 			window.addEventListener('load', readyCB, false)
 		}
-        __.env.loaded = true
+        __.env.loaded = 1
     },
 	onReady: (function(cbs){
 		return function(cb){
+			if (2 === __.env.loaded) return cb()
 			cbs.push(cb)
 			return function(){
 				for(var i=0,c; c=cbs[i]; i++) c()
+				__.env.loaded=2
 				cbs.length=0
 			}
 		}
@@ -124,6 +126,7 @@ var __ = {
     catch (e) {}
 
     env.appVer = appVerTag ? appVerTag.getAttribute('content') : '0'
+	env.loaded=0
     env.supportNative = false
 
     if (-1 === document.URL.indexOf('http://') &&
