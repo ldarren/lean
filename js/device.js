@@ -20,8 +20,8 @@
 			}
 			__.device={
 				model:m||NA,
-				platform:n.platform||NA,
 				version:v,
+				platform:'web',
 				manufacturer:n.vendor||NA,
 
 				cordova:0,
