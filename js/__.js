@@ -1,7 +1,7 @@
 !function(){ if (window.__) console.error('Another instance of lean detected') }()
 var __ = {
     env:{},
-    onLoad: function(cb){
+    load: function(cb){
 		var readyCB=__.onReady(cb)
 		if (__.env.supportNative){
 			document.addEventListener('deviceready', readyCB, false)
