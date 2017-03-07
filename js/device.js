@@ -1,14 +1,9 @@
 !function(){
     function setup(){
-		var d=__.refChain(window,['device'])
-		if (d) {
-			__.device=d
-		}else{
+		__.device=__.refChain(window,['device']) || (function(n, models){
 			var
-			NA='',
-			n=navigator,
 			ua=n.userAgent,
-			models=['Trident','Edge','Chromium','Chrome','Safari','Firefox','OPR','Opera'],
+			NA='',
 			v=NA,m
 
 			for(var i=0,idx,str; m=models[i]; i++){
@@ -18,7 +13,7 @@
 					break
 				}
 			}
-			__.device={
+			return {
 				model:m||NA,
 				version:v,
 				platform:'web',
@@ -27,9 +22,9 @@
 				cordova:0,
 				uuid:Math.random().toString(36).substr(2)+Date.now().toString(36),
 				isVirtual:!1,
-				serial:''
+				serial:NA
 			}
-		}
+		})(navigator, ['Trident','Edge','Chromium','Chrome','Safari','Firefox','OPR','Opera'])
     }
 	__.onReady(setup)
 }()
