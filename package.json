@@ -1,6 +1,6 @@
 {
   "name": "lean",
-  "version": "0.1.20",
+  "version": "0.2",
   "description": "javascript browser utilities",
   "main": "lean.js",
   "directories": {
@@ -14,8 +14,9 @@
     "url": "git+https://github.com/ldarren/lean.git"
   },
   "keywords": [
-    "functional",
-    "ui"
+    "cordova + web",
+	"ui",
+    "patch"
   ],
   "author": "Darren Liew",
   "license": "MIT",
