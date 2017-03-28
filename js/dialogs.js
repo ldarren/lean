@@ -1,6 +1,6 @@
 !function(){
     function setup(){
-		var n=__.refChain(window,['navigator','notification'])
+		var n=__.dotchain(window,['navigator','notification'])
 		if (n) {
 			__.dialogs={
 				alert:function(msg,title,btn,cb){ n.alert(msg,cb||__.dummyCB,title,btn) },

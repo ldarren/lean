@@ -1,8 +1,8 @@
 !function(){
     function setup(){
 		var
-		sp=__.refChain(window,['sqlitePlugin']),
-		od=__.refChain(window,['openDatabase']),
+		sp=__.dotchain(window,['sqlitePlugin']),
+		od=__.dotchain(window,['openDatabase']),
 		errCB=function(err){if(err)return console.error(err)},
 		dbs={},
 		store

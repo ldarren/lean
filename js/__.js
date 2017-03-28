@@ -24,10 +24,10 @@ var __ = {
 		}
 	})([]),
 	dummyCB:function(){},
-	refChain: function refChain(obj, p){
+	dotchain: function callee(obj, p){
 		if (!p || !p.length) return obj
 		var o = obj[p.shift()]
-		if (o) return refChain(o, p)
+		if (o) return callee(o, p)
 		return 0
 	},
 	querystring: function(obj){

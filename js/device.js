@@ -1,6 +1,6 @@
 !function(){
     function setup(){
-		__.device=__.refChain(window,['device']) || (function(n, models){
+		__.device=__.dotchain(window,['device']) || (function(n, models){
 			var
 			ua=n.userAgent,
 			NA='',

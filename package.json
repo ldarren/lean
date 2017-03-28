@@ -1,6 +1,6 @@
 {
   "name": "lean",
-  "version": "0.2",
+  "version": "0.2.1",
   "description": "javascript browser utilities",
   "main": "lean.js",
   "directories": {
