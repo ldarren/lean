@@ -77,7 +77,7 @@ var __ = {
             }
         }
         xhr.ontimeout=xhr.onerror=function(evt){
-			cb({error:xhr.statusText,code:xhr.status,params:arguments}, xhr.readyState, null, userData)
+			cb({error:xhr.statusText,code:xhr.status,src:evt,params:arguments}, xhr.readyState, null, userData)
 		}
         // never set Content-Type, it will trigger preflight options and chrome 35 has problem with json type
         //if (post && params && 2 === dataType) xhr.setRequestHeader('Content-Type', 'application/json')
