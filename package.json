@@ -1,5 +1,5 @@
 {
-  "name": "lean",
+  "name": "lean-wrap",
   "version": "0.2.1",
   "description": "javascript browser utilities",
   "main": "lean.js",
@@ -25,7 +25,7 @@
   },
   "homepage": "https://github.com/ldarren/lean#readme",
   "devDependencies": {
-    "clean-css": "^3.4.9",
-    "uglify-js": "^2.6.1"
+    "clean-css": "^4.0.0",
+    "uglify-js": "^2.8.0"
   }
 }
