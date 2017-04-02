@@ -51,7 +51,9 @@ var __ = {
 
         url = encodeURI(url)
 
-        if (!post){
+        if (post){
+			if (2===dataType) params=JSON.stringify(params)
+		}else{
             url += (-1===url.indexOf('?')?'?':'&')+'appVer='+__.env.appVer||0
             if (params){
                 url += '&'
@@ -81,7 +83,13 @@ var __ = {
 		}
         // never set Content-Type, it will trigger preflight options and chrome 35 has problem with json type
         //if (post && params && 2 === dataType) xhr.setRequestHeader('Content-Type', 'application/json')
-        if (post && params && 3 !== dataType) xhr.setRequestHeader('Content-Type', 'text/plain')
+        if (post && params){
+			switch(dataType){
+			case 1:
+			case 2: xhr.setRequestHeader('Content-Type', 'text/plain'); break
+			case 3:xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded'); break
+			}
+		}
         var h=opt.headers
         for (var k in h) xhr.setRequestHeader(k, h[k])
 
