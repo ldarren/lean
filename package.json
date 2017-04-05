@@ -1,31 +1,32 @@
 {
-  "name": "lean-wrap",
-  "version": "0.2.2",
-  "description": "javascript browser utilities",
-  "main": "lean.js",
-  "directories": {
-    "test": "tests"
-  },
-  "scripts": {
-    "test": "node tests.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ldarren/lean.git"
-  },
-  "keywords": [
-    "cordova + web",
-	"ui",
-    "patch"
-  ],
-  "author": "Darren Liew",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/ldarren/lean/issues"
-  },
-  "homepage": "https://github.com/ldarren/lean#readme",
-  "devDependencies": {
-    "clean-css": "^4.0.0",
-    "uglify-js": "^2.8.0"
-  }
+	"name": "lean-wrap",
+	"version": "0.2.3",
+	"description": "javascript browser utilities",
+	"main": "lean.js",
+	"directories": {
+		"test": "tests"
+	},
+	"scripts": {
+		"install":"./concat.js",
+		"test": "node tests.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/ldarren/lean.git"
+	},
+	"keywords": [
+		"cordova + web",
+		"ui",
+		"patch"
+	],
+	"author": "Darren Liew",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/ldarren/lean/issues"
+	},
+	"homepage": "https://github.com/ldarren/lean#readme",
+	"dependencies": {
+		"clean-css": "*",
+		"uglify-js": "*"
+	}
 }
