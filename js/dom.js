@@ -8,10 +8,14 @@
 		if (classNames) cl.add.apply(cl,classNames)
 	},
 	setAttributes=function(el,attributes){
-		if (attributes) for(var k in attributes) el.setAttribute(k,attributes[k])
+		if (attributes)
+			for(var i=0,keys=Object.keys(attributes),k,a; k=keys[i]; i++){
+				a=attributes[k]
+				if (null!=a && undefined!=a) el.setAttribute(k,a)
+			}
 	},
 	setChilds=function(el,childs){
-		if (!childs) return
+		if (undefined==childs || null==childs) return
 		if ('string'===typeof childs){
 			el.innerHTML=childs
 		}else{
