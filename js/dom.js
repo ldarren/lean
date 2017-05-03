@@ -1,6 +1,7 @@
 !function(){
 	var
 	head = document.head||document.getElementsByTagName('head')[0],
+	NOTATTRIBS=['el','tagName','id','classNames','content'],
 	setId=function(el,id){
 		if (id) el.id=id
 	},
@@ -10,16 +11,17 @@
 	setAttributes=function(el,attributes){
 		if (attributes)
 			for(var i=0,keys=Object.keys(attributes),k,a; k=keys[i]; i++){
+				if (~NOTATTRIBS.indexOf(k)) continue
 				a=attributes[k]
 				if (null!=a && undefined!=a) el.setAttribute(k,a)
 			}
 	},
-	setChilds=function(el,childs){
-		if (undefined==childs || null==childs) return
-		if ('string'===typeof childs){
-			el.innerHTML=childs
+	setContent=function(el,content){
+		if (undefined==content || null==content) return
+		if (content.charAt){
+			el.innerHTML=content
 		}else{
-			for(var i=0,c; c=childs[i]; i++) el.appendChild(c)
+			for(var i=0,c; c=content[i]; i++) el.appendChild(c)
 		}
 	}
 	__.dom={
@@ -65,19 +67,19 @@
 		setId:setId,
 		setClasses:setClasses,
 		setAttributes:setAttributes,
-		setChilds:setChilds,
+		setContent:setContent,
 		get:function(opt){
 			if (!opt) return
 			var el=opt.el
 			if (el){
-				if ('string'===typeof el) el=document.querySelector(el)
+				if (el.charAt) el=document.querySelector(el)
 			}else{
-				var el=document.createElement(opt.tagName || 'div')
+				el=document.createElement(opt.tagName || 'div')
 			}
 			setId(el,opt.id)
 			setClasses(el.classList,opt.classNames)
-			setAttributes(el,opt.attributes)
-			setChilds(el,opt.childs)
+			setAttributes(el,opt)
+			setContent(el,opt.content)
 
 			return el
 		},
