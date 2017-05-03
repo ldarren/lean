@@ -19,7 +19,7 @@
 		lastEventId = null,
 		lastPos= 0
 
-		if (!url || typeof url != 'string') throw new SyntaxError('Not enough arguments')
+		if (!url || !url.charAt) throw new SyntaxError('Not enough arguments')
 
 		this.URL = url
 		this.readyState = EventSource.CONNECTING

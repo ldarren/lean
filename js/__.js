@@ -42,12 +42,13 @@ var __ = {
     ajax: function(method, url, params, opt, cb, userData){
         cb=cb || function(err){if(err)console.error(err)} 
         if (!url) return cb('url not defined')
+		params=params||{}
         opt=opt||{}
 
         var
         xhr = new XMLHttpRequest(),
         post = 'POST' === (method = method.toUpperCase()),
-        dataType = ('string' === typeof params ? 1 : (params instanceof FormData ? 3 : 2))
+        dataType = (params.charAt ? 1 : (params instanceof FormData ? 3 : 2))
 
         url = encodeURI(url)
 
