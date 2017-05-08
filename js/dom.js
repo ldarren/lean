@@ -2,6 +2,27 @@
 	var
 	head = document.head||document.getElementsByTagName('head')[0],
 	NOTATTRIBS=['el','tagName','id','classNames','content'],
+	get=function(opt){
+		if (!opt) return
+		if (opt instanceof HTMLElement) return opt
+		var el=opt.el
+		if (el){
+			if (el.charAt) el=document.querySelector(el)
+		}else{
+			el=document.createElement(opt.tagName || 'div')
+		}
+		setId(el,opt.id)
+		setClasses(el.classList,opt.classNames)
+		setAttributes(el,opt)
+		setContent(el,opt.content)
+
+		return el
+	},
+	gets=function(el,opts,i){
+		if (i >= opts.length) return
+		el.appendChild(get(opts[i++]))
+		gets(el,opts,i)
+	}
 	setId=function(el,id){
 		if (id) el.id=id
 	},
@@ -21,7 +42,7 @@
 		if (content.charAt){
 			el.innerHTML=content
 		}else{
-			for(var i=0,c; c=content[i]; i++) el.appendChild(c)
+			gets(el,content,0)
 		}
 	}
 	__.dom={
@@ -68,21 +89,7 @@
 		setClasses:setClasses,
 		setAttributes:setAttributes,
 		setContent:setContent,
-		get:function(opt){
-			if (!opt) return
-			var el=opt.el
-			if (el){
-				if (el.charAt) el=document.querySelector(el)
-			}else{
-				el=document.createElement(opt.tagName || 'div')
-			}
-			setId(el,opt.id)
-			setClasses(el.classList,opt.classNames)
-			setAttributes(el,opt)
-			setContent(el,opt.content)
-
-			return el
-		},
+		get:get,
 		style: function(id,css){
 			var ele=head.querySelector('#'+id)
 			if (ele) return ele.dataset.rc=1+ele.dataset.rc
