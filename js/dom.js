@@ -26,8 +26,10 @@
 	setId=function(el,id){
 		if (id) el.id=id
 	},
-	setClasses=function(cl,classNames){
-		if (classNames) cl.add.apply(cl,classNames)
+	setClasses=function(cl,classes){
+		if (!classes || !classes.length) return
+		if (Array.isArray(classes)) cl.add.apply(cl,classes)
+		cl.add(classes)
 	},
 	setAttributes=function(el,attributes){
 		if (attributes)
@@ -91,6 +93,7 @@
 		setContent:setContent,
 		get:get,
 		style: function(id,css){
+			if (!css || !css.length) return
 			var ele=head.querySelector('#'+id)
 			if (ele) return ele.dataset.rc=1+ele.dataset.rc
 			ele=document.createElement('style')
