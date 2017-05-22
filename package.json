@@ -1,13 +1,13 @@
 {
 	"name": "lean-wrap",
-	"version": "0.2.7",
+	"version": "0.2.8",
 	"description": "javascript browser utilities",
-	"main": "lean.js",
+	"main": "bin/lean.js",
 	"directories": {
 		"test": "tests"
 	},
 	"scripts": {
-		"install":"./concat.js",
+		"prepublish":"./concat.js",
 		"test": "node tests.js"
 	},
 	"repository": {
@@ -25,7 +25,7 @@
 		"url": "https://github.com/ldarren/lean/issues"
 	},
 	"homepage": "https://github.com/ldarren/lean#readme",
-	"dependencies": {
+	"devDependencies": {
 		"clean-css": "*",
 		"uglify-js": "*"
 	}

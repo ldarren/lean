@@ -1,10 +1,10 @@
 #!/usr/bin/env node
-const target=process.argv[3] || './lean.css'
+const target=process.argv[3] || './bin/lean.css'
 
-var
+const
 fs=require('fs'),
 CleanCSS = require('clean-css'),
-src= `@import ${process.argv[2] || "css/index.css"};`
+src= `@import ${process.argv[2] || "src/css/index.css"};`
 
 new CleanCSS({rebase:false,sourceMap:true,target:target}).minify(src, (err, minified)=>{
     if (err) return console.error(err)

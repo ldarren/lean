@@ -20,8 +20,8 @@ readdirs=function(wd,dirs,output,cb){
 
 // concat [[js,ui,patch] lean]
 let
-origDirs = (process.argv[2] || 'js').split(','),
-dest = (process.argv[3] || 'lean')
+origDirs = (process.argv[2] || 'src/js').split(','),
+dest = (process.argv[3] || 'bin/lean')
 
 fs.readlink(symPath, (err, realPath)=>{
 	if (err) realPath = symPath
