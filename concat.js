@@ -3,6 +3,9 @@
 /* concat [src/js,src/ui,src/patch [bin/lean]] */
 
 const
+JS='.js',
+MIN_JS='.min.js',
+MIN_MAP=MIN_JS+'.map',
 fs = require('fs'),
 path = require('path'),
 uglify= require('uglify-js'),
@@ -27,13 +30,13 @@ dest = (process.argv[3] || path.join('bin','lean'))
 fs.readlink(symPath, (err, realPath)=>{
 	if (err) realPath = symPath
 	const wd = path.dirname(realPath)
-	dest = path.join(wd,dest)
-	console.log(`delete ${dest}.js`)
-	fs.unlink(dest+'.js', (err)=>{
+	const destAbs = path.join(wd,dest)
+	console.log(`delete ${destAbs}.js`)
+	fs.unlink(destAbs+JS, (err)=>{
 		readdirs(wd,origDirs,[],(err, files)=>{
 			if (err) return console.error(err)
-			console.log(`open file ${dest}.js`)
-			const ws = fs.createWriteStream(dest+'.js', {flags:'a'});
+			console.log(`open file ${destAbs}.js`)
+			const ws = fs.createWriteStream(destAbs+JS, {flags:'a'});
 			(function(cb){
 				if (!files.length) return cb()
 				var
@@ -46,14 +49,17 @@ fs.readlink(symPath, (err, realPath)=>{
 				rs.on('close', ()=>{ callee(cb) })
 				rs.pipe(ws, {end:false})
 			})(()=>{
-                const min=uglify.minify(dest+'.js',{outSourceMap:dest+'.min.js.map'})
-                fs.writeFile(dest+'.min.js', min.code, 'utf8', (err)=>{
-                    if (err) return console.error(err)
-                    fs.writeFile(dest+'.min.js.map', min.map, 'utf8', (err)=>{
-                        if (err) return console.error(err)
-                        console.log('Done!')
-                    })
-                })
+				fs.readFile(destAbs+JS,'utf8',(err,code)=>{
+					if (err) return console.error(err)
+					const min=uglify.minify(code,{sourceMap:{filename:dest+MIN_JS,url:dest+MIN_MAP}})
+					fs.writeFile(destAbs+MIN_JS, min.code, 'utf8', (err)=>{
+						if (err) return console.error(err)
+						fs.writeFile(destAbs+MIN_MAP, min.map, 'utf8', (err)=>{
+							if (err) return console.error(err)
+							console.log('Done!')
+						})
+					})
+				})
             })  
 		})      
 	})
