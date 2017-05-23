@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+/* concat [src/js,src/ui,src/patch [bin/lean]] */
+
 const
 fs = require('fs'),
 path = require('path'),
@@ -18,10 +20,9 @@ readdirs=function(wd,dirs,output,cb){
 	})
 }
 
-// concat [[js,ui,patch] lean]
 let
-origDirs = (process.argv[2] || 'src/js').split(','),
-dest = (process.argv[3] || 'bin/lean')
+origDirs = (process.argv[2] || path.join('src','js')).split(','),
+dest = (process.argv[3] || path.join('bin','lean'))
 
 fs.readlink(symPath, (err, realPath)=>{
 	if (err) realPath = symPath
