@@ -1,7 +1,7 @@
 !function(){
 	var
 	head = document.head||document.getElementsByTagName('head')[0],
-	NOTATTRIBS=['el','tagName','id','classNames','content'],
+	NOTATTRIBS=['el','tagName','id','className','content'],
 	get=function(opt){
 		if (!opt) return
 		if (opt instanceof HTMLElement) return opt
@@ -12,7 +12,7 @@
 			el=document.createElement(opt.tagName || 'div')
 		}
 		setId(el,opt.id)
-		setClasses(el.classList,opt.classNames)
+		setClasses(el.classList,opt.className)
 		setAttributes(el,opt)
 		setContent(el,opt.content)
 
@@ -28,8 +28,7 @@
 	},
 	setClasses=function(cl,classes){
 		if (!classes || !classes.length) return
-		if (Array.isArray(classes)) cl.add.apply(cl,classes)
-		cl.add(classes)
+		cl.add.apply(cl,Array.isArray(classes)?classes:classes.split(' '))
 	},
 	setAttributes=function(el,attributes){
 		if (attributes)
