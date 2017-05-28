@@ -294,7 +294,7 @@ var __ = {
 		style: function(id,css){
 			if (!css || !css.length) return
 			var ele=head.querySelector('#'+id)
-			if (ele) return ele.dataset.rc=1+ele.dataset.rc
+			if (ele) return ele.dataset.rc=1+parseInt(ele.dataset.rc)
 			ele=document.createElement('style')
 			ele.id=id
 			ele.dataset.rc=1
@@ -305,7 +305,7 @@ var __ = {
 			var ele=head.querySelector('#'+id)
 			if (!ele) return
 			var ds=ele.dataset
-			ds.rc=ds.rc-1
+			ds.rc=parseInt(ds.rc-1)
 			if (0==ds.rc) ele.parentNode.removeChild(ele)
 		}
     }
