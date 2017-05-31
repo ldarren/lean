@@ -35,11 +35,11 @@
 			for(var i=0,keys=Object.keys(attributes),k,a; k=keys[i]; i++){
 				if (~NOTATTRIBS.indexOf(k)) continue
 				a=attributes[k]
-				if (null!=a && undefined!=a) el.setAttribute(k,a)
+				if (null!=a) el.setAttribute(k,a)
 			}
 	},
 	setContent=function(el,content){
-		if (undefined==content || null==content) return
+		if (null==content) return
 		if (content.charAt){
 			el.innerHTML=content
 		}else{

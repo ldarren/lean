@@ -16,7 +16,7 @@
         currPage.addEventListener(__.env.transitionEnd, function cb(e){
             currPage.removeEventListener(__.env.transitionEnd, cb)
             book.dispatchEvent(__.createEvent('__flipped', {page:currPage}))
-            currPage = undefined
+            currPage = void 0
         }, false)
 
         switch(e.detail.from){

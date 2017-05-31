@@ -67,7 +67,7 @@ var __ = {
             }
         }
 
-        xhr.open(method, url, undefined===opt.async?true:opt.async, opt.un, opt.passwd)
+        xhr.open(method, url, !opt.sync, opt.un, opt.passwd)
 
 		xhr.timeout=opt.timeout||0
 		xhr.responseType=opt.responseType||''
@@ -114,10 +114,10 @@ var __ = {
 		if (!isSupported) {
 			el.setAttribute(eventName, '')
 			isSupported = 'function' === typeof el[eventName]
-			el[eventName] = undefined
+			el[eventName] = void 0
 			el.removeAttribute(eventName)
 		}
-		el = undefined
+		el = void 0
 		return isSupported
 	}
 }
@@ -128,7 +128,7 @@ var __ = {
     te = 'transitionend',
     wkte = 'webkitTransitionEnd'
 
-    env.transitionEnd = __.detectEvent(te) ? te : __.detectEvent(wkte.toLowerCase()) ? wkte : undefined
+    env.transitionEnd = __.detectEvent(te) ? te : __.detectEvent(wkte.toLowerCase()) ? wkte : void 0
 
     env.supportPassive=false
     try { window.addEventListener('t', null, Object.defineProperty({}, 'passive', {get:function(){env.supportPassive=true}})) }
