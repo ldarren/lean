@@ -56,13 +56,13 @@
 				ref.setAttribute('src', url)
 				ref.onload = cb
 				ref.onerror = cb
-				.insertBefore(ref, head.lastChild)
+				head.insertBefore(ref, head.lastChild)
 				return
 			case 'css':
 				ref=document.createElement('link')
 				ref.setAttribute('rel', 'stylesheet')
 				ref.setAttribute('href', url)
-				.insertBefore(ref, head.lastChild)
+				head.insertBefore(ref, head.lastChild)
 				return setTimeout(cb, 0)
 			default: return cb()
 			}
