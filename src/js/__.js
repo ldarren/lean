@@ -82,23 +82,20 @@ var __ = {
         xhr.ontimeout=xhr.onerror=function(evt){
 			cb({error:xhr.statusText,code:xhr.status,src:evt,params:arguments}, xhr.readyState, null, userData)
 		}
+		var ct='Content-Type'
+        var h=opt.headers
         // never set Content-Type, it will trigger preflight options and chrome 35 has problem with json type
         //if (post && params && 2 === dataType) xhr.setRequestHeader('Content-Type', 'application/json')
-        if (post && params){
+        if (post && !h[ct] && params){
 			switch(dataType){
 			case 1:
-			case 2: xhr.setRequestHeader('Content-Type', 'text/plain'); break
-			case 3:xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded'); break
+			case 2: xhr.setRequestHeader(ct, 'text/plain'); break
+			case 3:xhr.setRequestHeader(ct, 'multipart/form-data'); break
 			}
 		}
-        var h=opt.headers
         for (var k in h) xhr.setRequestHeader(k, h[k])
 
-        switch(dataType){
-        case 1: xhr.send(params); break
-        case 2: xhr.send(JSON.stringify(params)); break
-        case 3: xhr.send(params); break
-        }
+        xhr.send(params)
 		return xhr
     },
 	createEvent: function(name, detail, bubbles, cancelable){
@@ -138,8 +135,7 @@ var __ = {
 	env.loaded=0
     env.supportNative = false
 
-    if (-1 === document.URL.indexOf('http://') &&
-        -1 === document.URL.indexOf('https://')){
+    if (-1 === document.URL.indexOf('http://') && -1 === document.URL.indexOf('https://')){
         var tag = document.querySelector('meta[name=app-support-native]')
         env.supportNative = tag ? '1' === tag.getAttribute('content') : false
     }
