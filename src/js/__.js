@@ -76,6 +76,7 @@ var __ = {
             if (1 < xhr.readyState){
                 var st = xhr.status, loc
                 if (st>=300 && st<400 && (loc=xhr.getResponseHeader('location'))) return __.ajax(method,loc,params,opt,cb,userData)
+				xhr.onerror=void 0 // debouse for cors error
                 return cb((300>st || !st) ? null : {error:xhr.statusText,code:xhr.status},xhr.readyState,xhr.response,userData)
             }
         }
