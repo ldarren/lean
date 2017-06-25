@@ -1,4 +1,4 @@
-!function(){
+!function(){ 'use strict'
     function setup(){
 		var
 		sp=__.dotchain(window,['sqlitePlugin']),

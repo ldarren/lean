@@ -1,4 +1,5 @@
-!function(){ if (window.__) console.error('Another instance of lean detected') }()
+!function(){ 'use strict'
+if (window.__) console.error('Another instance of lean detected') }()
 var __ = {
     env:{},
     load: function(cb){
@@ -76,7 +77,7 @@ var __ = {
             if (1 < xhr.readyState){
                 var st = xhr.status, loc
                 if (st>=300 && st<400 && (loc=xhr.getResponseHeader('location'))) return __.ajax(method,loc,params,opt,cb,userData)
-				xhr.onerror=void 0
+				xhr.onerror=void 0 // debouse for cors error
                 return cb((300>st || !st) ? null : {error:xhr.statusText,code:xhr.status},xhr.readyState,xhr.response,userData)
             }
         }
@@ -119,7 +120,7 @@ var __ = {
 		return isSupported
 	}
 }
-!function(){
+!function(){ 'use strict'
     var
     env = __.env,
     appVerTag = document.querySelector('meta[name=app-version]'),
@@ -141,7 +142,7 @@ var __ = {
         env.supportNative = tag ? '1' === tag.getAttribute('content') : false
     }
 }()
-!function(){
+!function(){ 'use strict'
     function setup(){
 		__.device=__.dotchain(window,['device']) || (function(n, models){
 			var
@@ -171,7 +172,7 @@ var __ = {
     }
 	__.onReady(setup)
 }()
-!function(){
+!function(){ 'use strict'
     function setup(){
 		var n=__.dotchain(window,['navigator','notification'])
 		if (n) {
@@ -195,7 +196,7 @@ var __ = {
     }
 	__.onReady(setup)
 }()
-!function(){
+!function(){ 'use strict'
 	var
 	head = document.head||document.getElementsByTagName('head')[0],
 	NOTATTRIBS=['el','tagName','id','className','content'],
@@ -219,7 +220,7 @@ var __ = {
 		if (i >= opts.length) return
 		el.appendChild(get(opts[i++]))
 		gets(el,opts,i)
-	}
+	},
 	setId=function(el,id){
 		if (id) el.id=id
 	},
@@ -307,7 +308,7 @@ var __ = {
 		}
     }
 }()
-!function(){
+!function(){ 'use strict'
     if (__.detectEvent('touchstart')) return
 
     var
@@ -375,7 +376,7 @@ var __ = {
     }
     document.addEventListener(md, touchstart,  opt)
 }()
-!function(){
+!function(){ 'use strict'
     function setup(){
 		var
 		sp=__.dotchain(window,['sqlitePlugin']),
@@ -493,7 +494,7 @@ var __ = {
 	__.onReady(setup)
 }()
 // TODO: swipe, https://github.com/madrobby/zepto/blob/master/src/touch.js
-!function(){
+!function(){ 'use strict'
     var
 	startXY,
     lastXY,

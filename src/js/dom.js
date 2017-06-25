@@ -1,4 +1,4 @@
-!function(){
+!function(){ 'use strict'
 	var
 	head = document.head||document.getElementsByTagName('head')[0],
 	NOTATTRIBS=['el','tagName','id','className','content'],
@@ -22,7 +22,7 @@
 		if (i >= opts.length) return
 		el.appendChild(get(opts[i++]))
 		gets(el,opts,i)
-	}
+	},
 	setId=function(el,id){
 		if (id) el.id=id
 	},

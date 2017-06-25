@@ -1,4 +1,5 @@
-!function(){ if (window.__) console.error('Another instance of lean detected') }()
+!function(){ 'use strict'
+if (window.__) console.error('Another instance of lean detected') }()
 var __ = {
     env:{},
     load: function(cb){
@@ -119,7 +120,7 @@ var __ = {
 		return isSupported
 	}
 }
-!function(){
+!function(){ 'use strict'
     var
     env = __.env,
     appVerTag = document.querySelector('meta[name=app-version]'),

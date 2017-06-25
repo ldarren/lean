@@ -1,4 +1,4 @@
-!function(){
+!function(){ 'use strict'
 	//https://github.com/jonathantneal/closest/blob/master/closest.js
 	if ('function' !== typeof Element.prototype.matches) {
 		Element.prototype.matches = 

@@ -1,4 +1,4 @@
-!function(){
+!function(){ 'use strict'
     function flip(e){
         var
         book = e.target,

@@ -1,4 +1,4 @@
-!function(){
+!function(){ 'use strict'
     function transited(e){
         var ele = e.target
         ele.removeEventListener(__.env.transitionEnd, transited)

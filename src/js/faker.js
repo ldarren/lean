@@ -1,4 +1,4 @@
-!function(){
+!function(){ 'use strict'
     if (__.detectEvent('touchstart')) return
 
     var

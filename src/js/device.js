@@ -1,4 +1,4 @@
-!function(){
+!function(){ 'use strict'
     function setup(){
 		__.device=__.dotchain(window,['device']) || (function(n, models){
 			var

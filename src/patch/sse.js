@@ -1,5 +1,5 @@
 // adapted from https://github.com/remy/polyfills/blob/master/EventSource.js
-;(function (global) {
+;(function (global) { 'use strict'
 
 	if (global.EventSource) return
 

@@ -1,4 +1,4 @@
-!function(){
+!function(){ 'use strict'
     function setup(){
 		var n=__.dotchain(window,['navigator','notification'])
 		if (n) {

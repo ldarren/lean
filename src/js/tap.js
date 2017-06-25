@@ -1,5 +1,5 @@
 // TODO: swipe, https://github.com/madrobby/zepto/blob/master/src/touch.js
-!function(){
+!function(){ 'use strict'
     var
 	startXY,
     lastXY,
