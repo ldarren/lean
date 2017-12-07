@@ -289,22 +289,25 @@ var __ = {
 		setAttributes:setAttributes,
 		setContent:setContent,
 		get:get,
-		style: function(id,css){
+		style: function(id, src, css){
 			if (!css || !css.length) return
-			var ele=head.querySelector('#'+id)
+			var ele=head.querySelector('#'+id+'[src="'+src+'"]')
 			if (ele) return ele.dataset.rc=1+parseInt(ele.dataset.rc)
 			ele=document.createElement('style')
 			ele.id=id
+			ele.setAttribute('src', src)
 			ele.dataset.rc=1
 			ele.appendChild(document.createTextNode(css))
 			head.appendChild(ele)
 		},
 		unstyle: function(id){
-			var ele=head.querySelector('#'+id)
-			if (!ele) return
-			var ds=ele.dataset
-			ds.rc=parseInt(ds.rc-1)
-			if (0==ds.rc) ele.parentNode.removeChild(ele)
+			var eles=head.querySelectorAll('#'+id)
+			if (!eles) return
+			for (var i = 0, ele, ds; ele = eles[i]; i++){
+				ds=ele.dataset
+				ds.rc=parseInt(ds.rc) - 1
+				if (0===ds.rc) ele.parentNode.removeChild(ele)
+			}
 		}
     }
 }()
