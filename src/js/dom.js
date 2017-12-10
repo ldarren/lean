@@ -1,7 +1,18 @@
 !function(){ 'use strict'
 	var
 	head = document.head||document.getElementsByTagName('head')[0],
-	NOTATTRIBS=['el','tagName','id','className','content'],
+	NOTATTRIBS=['el','tagName','id','className','style','content'],
+	remove = function(el, keepFirst){
+		if (!el) return
+		while(el.hasChildNodes()){
+			remove(el.lastChild)
+		}
+		!keepFirst && el.parentElement && el.parentElement.removeChild(el)
+	},
+	forget=function(el, opt){
+		remove(el, !!opt.el)
+		unstyle(opt.style)
+	},
 	get=function(opt){
 		if (!opt) return
 		if (opt instanceof HTMLElement) return opt
@@ -14,6 +25,7 @@
 		setId(el,opt.id)
 		setClasses(el.classList,opt.className)
 		setAttributes(el,opt)
+		style(opt.style)
 		setContent(el,opt.content)
 
 		return el
@@ -44,6 +56,34 @@
 			el.innerHTML=content
 		}else{
 			gets(el,content,0)
+		}
+	},
+	style= function(style){
+		if (!style) return
+
+		var keys = Object.keys(style)
+		for (var i = 0, src, ele; src = keys[i]; i++){
+			ele=head.querySelector('style[src="' + src + '"]')
+			if (ele) {
+				ele.dataset.rc = 1 + parseInt(ele.dataset.rc)
+				continue
+			}
+			ele=document.createElement('style')
+			ele.setAttribute('src', src)
+			ele.dataset.rc=1
+			ele.appendChild(document.createTextNode(style[src]))
+			head.appendChild(ele)
+		}
+	},
+	unstyle= function(style){
+		if (!style) return
+		var keys = Object.keys(style)
+		for (var i = 0, src, ele, ds; src = keys[i]; i++){
+			ele = head.querySelector('style[src="' + src + '"]')
+			if (!ele) continue
+			ds=ele.dataset
+			ds.rc=parseInt(ds.rc) - 1
+			if (0 == ds.rc) ele.parentNode.removeChild(ele)
 		}
 	}
 	__.dom={
@@ -91,25 +131,8 @@
 		setAttributes:setAttributes,
 		setContent:setContent,
 		get:get,
-		style: function(id, src, css){
-			if (!css || !css.length) return
-			var ele=head.querySelector('#'+id+'[src="'+src+'"]')
-			if (ele) return ele.dataset.rc=1+parseInt(ele.dataset.rc)
-			ele=document.createElement('style')
-			ele.id=id
-			ele.setAttribute('src', src)
-			ele.dataset.rc=1
-			ele.appendChild(document.createTextNode(css))
-			head.appendChild(ele)
-		},
-		unstyle: function(id){
-			var eles=head.querySelectorAll('#'+id)
-			if (!eles) return
-			for (var i = 0, ele, ds; ele = eles[i]; i++){
-				ds=ele.dataset
-				ds.rc=parseInt(ds.rc) - 1
-				if (0===ds.rc) ele.parentNode.removeChild(ele)
-			}
-		}
+		forget:forget,
+		style: style,
+		unstyle: unstyle
     }
 }()
