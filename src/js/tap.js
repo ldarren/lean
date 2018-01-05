@@ -13,7 +13,7 @@
     longTap = function(e){
         if (cancelled) return
         cancelled = true
-        e.target.dispatchEvent(__.createEvent('longTap', null, true))
+        e.target.dispatchEvent(__.createEvent('longTap', lastXY, true))
     },
     touchstart = function(e){
         cancelled = false
@@ -25,17 +25,18 @@
         if (cancelled) return
         var now = Date.now()
         if (now - lastTap < 300){
-			e.target.dispatchEvent(__.createEvent('taps', null, true))
+			e.target.dispatchEvent(__.createEvent('taps', lastXY, true))
 			lastTap=0
 		}else{
-			e.target.dispatchEvent(__.createEvent('tap', null, true))
+			e.target.dispatchEvent(__.createEvent('tap', lastXY, true))
 			lastTap=now
 		}
     },
     touchmove = function(e){
         var xy=getXY(e.touches[0])
         if (cancelled){
-		    if (xy[0]>lastXY[0]+9 || xy[1]>lastXY[1]+9) e.target.dispatchEvent(__.createEvent('rub',[xy[0]-lastXY[0],xy[1]-lastXY[1]],true))
+		    if (xy[0]>lastXY[0]+9 || xy[1]>lastXY[1]+9)
+				e.target.dispatchEvent(__.createEvent('rub',[startXY[0], startXY[1], xy[0]-lastXY[0],xy[1]-lastXY[1]],true))
         }else{
 		    if (xy[0]>startXY[0]+9 || xy[1]>startXY[1]+9) cancelled = true
         }
