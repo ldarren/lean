@@ -36,7 +36,7 @@
         var xy=getXY(e.touches[0])
         if (cancelled){
 		    if (xy[0]>lastXY[0]+9 || xy[1]>lastXY[1]+9)
-				e.target.dispatchEvent(__.createEvent('rub',[startXY[0], startXY[1], xy[0]-lastXY[0],xy[1]-lastXY[1]],true))
+				e.target.dispatchEvent(__.createEvent('rub',[lastXY[0], lastXY[1], xy[0], xy[1]],true))
         }else{
 		    if (xy[0]>startXY[0]+9 || xy[1]>startXY[1]+9) cancelled = true
         }
