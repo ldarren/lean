@@ -6,11 +6,9 @@
 	md='mousedown',
 	mu='mouseup',
 	mm='mousemove',
-	mo='mouseout',
 	ts='touchstart',
 	te='touchend',
 	tm='touchmove',
-	tc='touchcancel',
     dispatchTouch = function(e){
         var name
 
@@ -18,7 +16,6 @@
         case md: name = ts; break
         case mu: name = te; break
         case mm: name = tm; break
-        case mo: name = tc; break
         default: return console.error('wrong event: '+e.type)
         }
 
@@ -42,24 +39,17 @@
         document.removeEventListener(md, touchstart, opt)
         document.removeEventListener(mm, touchmove, opt)
         document.removeEventListener(mu, touchend, opt)
-        document.removeEventListener(mo, touchcancel, opt)
 	},
     touchstart = function(e){
 		clearAll()
         document.addEventListener(mm, touchmove,  opt)
         document.addEventListener(mu, touchend,  opt)
-        document.addEventListener(mo, touchcancel,  opt)
         dispatchTouch(e)
     },
     touchmove = function(e){
         dispatchTouch(e)
     },
     touchend = function(e){
-		clearAll()
-        document.addEventListener(md, touchstart,  opt)
-        dispatchTouch(e)
-    },
-    touchcancel = function(e){
 		clearAll()
         document.addEventListener(md, touchstart,  opt)
         dispatchTouch(e)
