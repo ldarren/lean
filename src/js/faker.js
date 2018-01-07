@@ -39,10 +39,10 @@
         ele.dispatchEvent(evt)
     },
 	clearAll=function(){
-        document.removeEventListener(md, touchstart)
-        document.removeEventListener(mm, touchmove)
-        document.removeEventListener(mu, touchend)
-        document.removeEventListener(mo, touchcancel)
+        document.removeEventListener(md, touchstart, opt)
+        document.removeEventListener(mm, touchmove, opt)
+        document.removeEventListener(mu, touchend, opt)
+        document.removeEventListener(mo, touchcancel, opt)
 	},
     touchstart = function(e){
 		clearAll()
