@@ -46,10 +46,9 @@ var __ = {
 		params=params||{}
         opt=opt||{}
 
-        var
-        xhr = new XMLHttpRequest(),
-        post = 'POST' === (method = method.toUpperCase()),
-        dataType = (params.charAt ? 1 : (params instanceof FormData ? 3 : 2))
+        var xhr = new XMLHttpRequest()
+        var post = 'POST' === (method = method.toUpperCase())
+        var dataType = (params.charAt ? 1 : (params instanceof FormData ? 3 : 2))
 
         url = encodeURI(url)
 
@@ -77,8 +76,12 @@ var __ = {
             if (1 < xhr.readyState){
                 var st = xhr.status, loc
                 if (st>=300 && st<400 && (loc=xhr.getResponseHeader('location'))) return __.ajax(method,loc,params,opt,cb,userData)
-				xhr.onerror=void 0 // debouse for cors error
-                return cb((300>st || !st) ? null : {error:xhr.statusText,code:xhr.status},xhr.readyState,xhr.response,userData)
+				xhr.onerror=void 0 // debounce for cors error
+                return cb(
+					(300>st || !st) ? null : {error:xhr.statusText,code:xhr.status},
+					xhr.readyState,
+					xhr.response,
+					userData)
             }
         }
         xhr.ontimeout=xhr.onerror=function(evt){
@@ -88,11 +91,11 @@ var __ = {
         var h=opt.headers
         // never set Content-Type, it will trigger preflight options and chrome 35 has problem with json type
         //if (post && params && 2 === dataType) xhr.setRequestHeader('Content-Type', 'application/json')
-        if (post && !h[ct] && params){
+        if (post && (!h || !h[ct]) && params){
 			switch(dataType){
 			case 1:
 			case 2: xhr.setRequestHeader(ct, 'text/plain'); break
-			case 3:xhr.setRequestHeader(ct, 'multipart/form-data'); break
+			case 3: xhr.setRequestHeader(ct, 'multipart/form-data'); break
 			}
 		}
         for (var k in h) xhr.setRequestHeader(k, h[k])
@@ -100,6 +103,12 @@ var __ = {
         xhr.send(params)
 		return xhr
     },
+	// Use the browser's built-in functionality to quickly and safely escape the string
+	escapeXML: function(str) {
+		var p = document.createElement('p')
+		p.appendChild(document.createTextNode(str))
+		return p.innerHTML
+	},
 	createEvent: function(name, detail, bubbles, cancelable){
 		var evt = document.createEvent('CustomEvent')
 		evt.initCustomEvent(name, bubbles || false, cancelable || false, detail)
