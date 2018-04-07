@@ -1,6 +1,6 @@
 {
 	"name": "lean-wrap",
-	"version": "0.2.23",
+	"version": "0.2.24",
 	"description": "javascript browser utilities",
 	"main": "bin/lean.js",
 	"directories": {
@@ -26,7 +26,8 @@
 	},
 	"homepage": "https://github.com/ldarren/lean#readme",
 	"devDependencies": {
-		"clean-css": "*",
-		"uglify-js": "*"
+		"clean-css": "^4.1.11",
+		"pico-common": "^0.9.3",
+		"uglify-js": "^3.3.18"
 	}
 }
