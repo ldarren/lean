@@ -11,3 +11,14 @@ ensure('ensure __.ajax work correctly', cb => {
 		cb(err, -1 !== res.indexOf('WORK'))
 	})
 })
+ensure('ensure __.dom dataset work correctly', cb => {
+	var hello = 'world'
+	var body = __.dom.get({
+		el: 'body',
+		data: {
+			hello
+		}
+	})
+
+	cb(null, hello === body.dataset.hello)
+})

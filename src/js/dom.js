@@ -1,7 +1,7 @@
 !function(){ 'use strict'
 	var
 	head = document.head||document.getElementsByTagName('head')[0],
-	NOTATTRIBS=['el','tagName','id','className','style','content'],
+	NOTATTRIBS=['el','tagName','tag','id','className','class','dataset','data','style','content'],
 	remove = function(el, keepFirst){
 		if (!el) return
 		while(el.hasChildNodes()){
@@ -20,20 +20,19 @@
 		if (el){
 			if (el.charAt) el=document.querySelector(el)
 		}else{
-			el=document.createElement(opt.tagName || 'div')
+			el=document.createElement(opt.tag || opt.tagName || 'div')
 		}
 		setId(el,opt.id)
-		setClasses(el.classList,opt.className)
+		setClasses(el.classList, opt.class || opt.className)
+		setDataset(el.dataset,opt.data || opt.dataset)
 		setAttributes(el,opt)
 		style(opt.style)
-		setContent(el,opt.content)
-
-		return el
+		return setContent(el,opt.content)
 	},
 	gets=function(el,opts,i){
-		if (i >= opts.length) return
+		if (i >= opts.length) return el
 		el.appendChild(get(opts[i++]))
-		gets(el,opts,i)
+		return gets(el,opts,i)
 	},
 	setId=function(el,id){
 		if (id) el.id=id
@@ -42,21 +41,29 @@
 		if (!classes || !classes.length) return
 		cl.add.apply(cl,Array.isArray(classes)?classes:classes.split(' '))
 	},
+	setDataset=function(dataset, obj){
+		if (!obj) return
+		for(var i=0,keys=Object.keys(obj),k; k=keys[i]; i++){
+			dataset[k]=obj[k]
+		}
+	},
 	setAttributes=function(el,attributes){
-		if (attributes)
-			for(var i=0,keys=Object.keys(attributes),k,a; k=keys[i]; i++){
-				if (~NOTATTRIBS.indexOf(k)) continue
-				a=attributes[k]
-				if (null!=a) el.setAttribute(k,a)
-			}
+		if (!attributes) return
+		for(var i=0,keys=Object.keys(attributes),k,a; k=keys[i]; i++){
+			if (~NOTATTRIBS.indexOf(k)) continue
+			a=attributes[k]
+			if (null==a) el.removeAttribute(k)
+			else el.setAttribute(k,a)
+		}
 	},
 	setContent=function(el,content){
-		if (null==content) return
+		if (null==content) return el
 		if (content.charAt){
 			el.innerHTML=content
 		}else{
-			gets(el,content,0)
+			return gets(el,content,0)
 		}
+		return el
 	},
 	style= function(style){
 		if (!style) return

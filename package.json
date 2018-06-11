@@ -1,6 +1,6 @@
 {
 	"name": "lean-wrap",
-	"version": "0.2.24",
+	"version": "0.2.25",
 	"description": "javascript browser utilities",
 	"main": "bin/lean.js",
 	"directories": {
@@ -8,7 +8,7 @@
 	},
 	"scripts": {
 		"prepublish": "./concat.js",
-		"test": "node tests.js"
+    	"test": "echo \"Run from web browser\" && exit 1"
 	},
 	"repository": {
 		"type": "git",
