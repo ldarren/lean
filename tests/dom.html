@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset=utf-8>
+<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width, minimal-ui">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>DOM Leak Test</title>
+<script src=../bin/lean.js></script>
+</head>
+<body>
+
+<script>
+	var dom = __.dom
+	var parentOpt = {
+		tagName: 'div',
+		className: 'parent container',
+	}
+	var child1Opt = {
+		tagName: 'div',
+		className: 'child',
+		content: 'open memory tab in chrome developer tool'
+	}
+	var child2Opt = {
+		tagName: 'div',
+		className: 'child',
+		content: 'select heap snapshot or allocation timeline or allocation sampling'
+	}
+	var child3Opt = {
+		tagName: 'div',
+		className: 'child',
+		content: 'press record and clear gc from time to time to analyse memory profile'
+	}
+	var divs = []
+
+	function add(){
+		var parent = dom.get(parentOpt)
+		divs.push([parent, parentOpt])
+		document.body.appendChild(parent)
+
+		var child1 = dom.get(child1Opt)
+		divs.push([child1, child1Opt])
+		parent.appendChild(child1)
+
+		var child2 = dom.get(child2Opt)
+		divs.push([child2, child2Opt])
+		parent.appendChild(child2)
+
+		var child3 = dom.get(child3Opt)
+		divs.push([child3, child3Opt])
+		parent.appendChild(child3)
+
+		setTimeout(del, 1000)
+	}
+
+	function del(){
+		divs.forEach(div => {
+			dom.forget(div[0], div[1])
+		})
+		divs.length = 0
+		setTimeout(add, 1000)
+	}
+
+	setTimeout(add, 1000)
+</script>
+
+</body>
+</html>

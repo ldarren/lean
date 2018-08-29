@@ -6,24 +6,32 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <title>Store Test</title>
-<script src=../lean.js></script>
+<script src=../bin/lean.js></script>
 </head>
 <body>
 
 <script>
-__.onLoad(function(){
+
+function result(testName){
+	return function(err, value){
+		if (err) return console.error(testName + ' Err', err)
+		console.log(testName, value)
+	}
+}
+
+__.load(function(){
 	var s=__.store()
-	s.setItem('key','value',function(err){if (err)return console.error('setItem Err',err)})
-	s.getItem('key',function(err,value){if(err)return console.error('getItem Err',err); console.log('getItem',value)})
-	s.removeItem('key',function(err){if(err)return console.error('removeItem Err',err)})
-	s.getItem('key',function(err,value){if(err)return console.error('getItem Err',err); console.log('getItem',value)})
-	s.setItem('key1','value1',function(err){if (err)return console.error('setItem Err',err)})
-	s.setItem('key2','value2',function(err){if (err)return console.error('setItem Err',err)})
-	s.key(0,function(err,key){if (err)return console.error('key Err',err);console.log('key',key)})
-	s.length(function(err,length){if (err)return console.error('length Err',err);console.log('length',length)})
-	s.clear(function(err,length){if (err)return console.error('clear Err',err)})
-	s.key(0,function(err,key){if (err)return console.error('key Err',err);console.log('key',key)})
-	s.length(function(err,length){if (err)return console.error('length Err',err);console.log('length',length)})
+	s.setItem('key','value', result('setItem'))
+	s.getItem('key', result('getItem'))
+	s.removeItem('key', result('removeItem'))
+	s.getItem('key', result('getItem'))
+	s.setItem('key1','value1', result('setItem'))
+	s.setItem('key2','value2', result('setItem'))
+	s.key(0, result('key'))
+	s.length(result('length'))
+	s.clear(result('clear'))
+	s.key(0, result('key'))
+	s.length(result('length'))
 })
 </script>
 
