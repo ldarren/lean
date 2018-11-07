@@ -118,15 +118,7 @@ var __ = {
 	detectEvent: function(eventName, tagName){
 		var el = document.createElement(tagName || 'div')
 		eventName = 'on' + eventName
-		var isSupported = (eventName in el) || (eventName in window)
-		if (!isSupported) {
-			el.setAttribute(eventName, '')
-			isSupported = 'function' === typeof el[eventName]
-			el[eventName] = void 0
-			el.removeAttribute(eventName)
-		}
-		el = void 0
-		return isSupported
+		return (eventName in el) || (eventName in window)
 	}
 }
 !function(){ 'use strict'
