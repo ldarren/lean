@@ -1,15 +1,16 @@
-!function(){ 'use strict'
-    function setup(){
+!function(){
+	'use strict'
+	function setup(){
 		__.device=__.dotchain(window,['device']) || (function(n, models){
 			var
-			ua=n.userAgent,
-			NA='',
-			v=NA,m
+				ua=n.userAgent,
+				NA='',
+				v=NA,m
 
-			for(var i=0,idx,str; m=models[i]; i++){
+			for(var i=0,idx; (m=models[i]); i++){
 				idx=ua.indexOf(m)
 				if (~idx) {
-        			v=ua.substr(idx+m.length+1).split(/[ ;]+/,1)[0]
+					v=ua.substr(idx+m.length+1).split(/[ ;]+/,1)[0]
 					break
 				}
 			}
@@ -25,6 +26,6 @@
 				serial:NA
 			}
 		})(navigator, ['Trident','Edge','Chromium','Chrome','Safari','Firefox','OPR','Opera'])
-    }
+	}
 	__.onReady(setup)
 }()

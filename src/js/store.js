@@ -1,11 +1,14 @@
-!function(){ 'use strict'
-    function setup(){
+!function(){
+	'use strict'
+	function setup(){
 		var
-		sp=__.dotchain(window,['sqlitePlugin']),
-		od=__.dotchain(window,['openDatabase']),
-		errCB=function(err){if(err)return console.error(err)},
-		dbs={},
-		store
+			sp=__.dotchain(window,['sqlitePlugin']),
+			od=__.dotchain(window,['openDatabase']),
+			errCB=function(err){
+				if(err)return console.error(err)
+			},
+			dbs={},
+			store
 
 		if (sp || od){
 			store=function(name){
@@ -14,9 +17,11 @@
 				else db=openDatabase(name, '1.0', 'lean local storage emulator', 50 * 1024 * 1024)
 				db.transaction(function(tx){
 					tx.executeSql('CREATE TABLE IF NOT EXISTS kv (key TEXT UNIQUE NOT NULL, val TEXT);',
-					null,
-					null,
-					function(tx,err){console.error(err)})
+						null,
+						null,
+						function(tx,err){
+							console.error(err)
+						})
 				})
 				this.db=db
 			}
@@ -46,12 +51,12 @@
 					cb=cb||errCB
 					this.db.transaction(function(tx){
 						tx.executeSql('INSERT OR REPLACE INTO kv (oid,key,val) VALUES ((SELECT oid FROM kv WHERE key=?), ?, ?);',
-						[key,key,val],
-						function(tx,res){
-							cb(null, res.insertId)
-						}, function(tx,err){
-							cb(err)
-						})
+							[key,key,val],
+							function(tx,res){
+								cb(null, res.insertId)
+							}, function(tx,err){
+								cb(err)
+							})
 					})
 				},
 				removeItem:function(key,cb){
@@ -90,12 +95,19 @@
 				this.db=window.localStorage
 			}
 			store.prototype={
-				key:function(index,cb){cb(null,this.db.key(index))},
-				getItem:function(key,cb){cb(null,this.db.getItem(this.prefix+key))},
+				key:function(index,cb){
+					cb(null,this.db.key(index))
+				},
+				getItem:function(key,cb){
+					cb(null,this.db.getItem(this.prefix+key))
+				},
 				setItem:function(key,val,cb){
 					cb=cb||errCB
-					try{cb(null,this.db.setItem(this.prefix+key,val))}
-					catch(exp){cb(exp)}
+					try{
+						cb(null,this.db.setItem(this.prefix+key,val))
+					} catch(exp){
+						cb(exp)
+					}
 				},
 				removeItem:function(key,cb){
 					cb=cb||errCB
@@ -105,13 +117,15 @@
 					cb=cb||errCB
 					cb(null,this.db.clear())
 				},
-				length:function(cb){ cb(null,this.db.length) }
+				length:function(cb){
+					cb(null,this.db.length)
+				}
 			}
 		}
 		__.store=function(name){
 			name=name||'localstorage'
 			return dbs[name] = dbs[name] || new store(name)
 		}
-    }
+	}
 	__.onReady(setup)
 }()
