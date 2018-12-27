@@ -84,7 +84,8 @@ var __ = {
 				if (st>=300 && st<400 && (loc=xhr.getResponseHeader('location'))) return __.ajax(method,loc,params,opt,cb,userData)
 				xhr.onerror=void 0 // debounce for cors error
 				return cb(
-					(st && 300>st) ? null : {error:xhr.statusText,code:xhr.status},
+					// webkit st === 0 when get from local
+					(!xhr.statusText || 300>st) ? null : {error:xhr.statusText,code:st},
 					xhr.readyState,
 					xhr.response,
 					userData)
