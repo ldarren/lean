@@ -85,7 +85,7 @@ var __ = {
 				xhr.onerror=void 0 // debounce for cors error
 				return cb(
 					// webkit st === 0 when get from local
-					(!xhr.statusText || 300>st) ? null : {error:xhr.statusText,code:st},
+					(300>st || (!st && xhr.response)) ? null : {error:xhr.statusText,code:st},
 					xhr.readyState,
 					xhr.response,
 					userData)
