@@ -91,7 +91,7 @@
 				if (!ele) continue
 				ds=ele.dataset
 				ds.rc=parseInt(ds.rc) - 1
-				if (!ds.rc) ele.parentNode.removeChild(ele)
+				if (0 >= ds.rc) ele.parentNode.removeChild(ele)
 			}
 		}
 	__.dom={
