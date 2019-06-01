@@ -1,6 +1,6 @@
 {
 	"name": "lean-wrap",
-	"version": "0.2.31",
+	"version": "0.2.32",
 	"description": "javascript browser utilities",
 	"main": "bin/lean.js",
 	"directories": {

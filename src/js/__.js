@@ -38,10 +38,10 @@ var __ = {
 			a.push(encodeURIComponent(k)+'='+encodeURIComponent(obj[k]));return a
 		},[]).join('&')
 	},
-	// method: get/post,
+	// method: get/post/put/delete/patch,
 	// url: path, 
 	// params: null/parameters (optional),
-	// opt: {responseType,async,un,passwd,headers} (optional),
+	// opt: {responseType,async,un,passwd,headers,useBody,useURL} (optional),
 	// cb: callback(err, state, res, userData),
 	// userData: optional
 	ajax: function(method, url, params, opt, cb, userData){
@@ -49,18 +49,21 @@ var __ = {
 			if(err)console.error(err)
 		}
 		if (!url) return cb('url not defined')
+		method = method.toUpperCase()
 		params=params||{}
 		opt=opt||{}
 
 		var xhr = new XMLHttpRequest()
-		var post = 'POST' === (method = method.toUpperCase())
+		var useBody = null == opt.useBody ? 'GET' !== method : opt.useBody
+		var useURL = null == opt.useURL ? !useBody : opt.useURL
 		var dataType = (params.charAt ? 1 : (params instanceof FormData ? 3 : 2))
 
 		url = encodeURI(url)
 
-		if (post){
+		if (useBody){
 			if (2===dataType) params=JSON.stringify(params)
-		}else{
+		}
+		if (useURL){
 			url += (-1===url.indexOf('?')?'?':'&')+'appVer='+__.env.appVer||0
 			if (params){
 				url += '&'
@@ -97,8 +100,8 @@ var __ = {
 		var ct='Content-Type'
 		var h=opt.headers
 		// never set Content-Type, it will trigger preflight options and chrome 35 has problem with json type
-		//if (post && params && 2 === dataType) xhr.setRequestHeader('Content-Type', 'application/json')
-		if (post && (!h || !h[ct]) && params){
+		//if (useBody && params && 2 === dataType) xhr.setRequestHeader('Content-Type', 'application/json')
+		if (useBody && (!h || !h[ct]) && params){
 			switch(dataType){
 			case 1:
 			case 2: xhr.setRequestHeader(ct, 'text/plain'); break
