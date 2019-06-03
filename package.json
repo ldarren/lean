@@ -1,13 +1,13 @@
 {
 	"name": "lean-wrap",
-	"version": "0.2.32",
+	"version": "0.2.33",
 	"description": "javascript browser utilities",
 	"main": "bin/lean.js",
 	"directories": {
 		"test": "tests"
 	},
 	"scripts": {
-		"prepublish": "./concat.js",
+		"prepare": "./concat.js",
 		"test": "echo \"Run from web browser\" && exit 1",
 		"lint": "eslint ./src/",
 		"lint:fix": "eslint ./src/ --fix"
