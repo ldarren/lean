@@ -48,7 +48,7 @@ var __ = {
 	 * @param {object} [opt] - options (optional)
 	 * @param {object} [opt.query] - query string to be included regardless of request method
 	 * @param {string} [opt.responseType] - https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/responseType#syntax
-	 * @param {boolean} [opt.async] - placed in synchronous mode by passing false
+	 * @param {boolean} [opt.sync] - placed in synchronous mode by passing true
 	 * @param {string} [opt.user] - basic auth username
 	 * @param {string} [opt.password] - basic auth password
 	 * @param {object} [opt.headers] - request headers
@@ -69,7 +69,7 @@ var __ = {
 		var isGet ='GET' === M
 		var dataType = 0
 		if (params){
-			dataType = params.charAt ? 1 : (params instanceof FormData ? 3 : 2))
+			dataType = params.charAt ? 1 : (params instanceof FormData ? 3 : 2)
 		}
 
 		var urlobj = new URL(href)
@@ -80,8 +80,8 @@ var __ = {
 			if (params){
 				href += '&'
 				switch(dataType){
-				case 1: urlobj.search += encodeURIComponent(params); break
-				case 2: urlobj.search += __.querystring(params); break
+				case 1: urlobj.search += '&' + encodeURIComponent(params); break
+				case 2: urlobj.search += '&' + __.querystring(params); break
 				case 3: return cb('FormData with GET method is not supported yet')
 				}
 				params = null
@@ -91,10 +91,10 @@ var __ = {
 			if (2===dataType) params=JSON.stringify(params)
 		}
 
-		xhr.open(M, urlobj.toString(), options.async, options.user, options.password)
+		xhr.open(M, urlobj.toString(), !options.sync, options.user, options.password)
 
 		xhr.timeout=options.timeout||0
-		xhr.responseType=opt.responseType||''
+		xhr.responseType=options.responseType||''
 
 		xhr.onreadystatechange=function(){
 			if (1 < xhr.readyState){
@@ -117,8 +117,8 @@ var __ = {
 		// never set Content-Type, it will trigger preflight options and chrome 35 has problem with json type
 		if (!isGet && (!h || !h[ct]) && params){
 			switch(dataType){
-			case 1: xhr.setRequestHeader(ct, 'application/json'); break
-			case 2: xhr.setRequestHeader(ct, 'text/plain'); break
+			case 1: xhr.setRequestHeader(ct, 'text/plain'); break
+			case 2: xhr.setRequestHeader(ct, 'application/json'); break
 			case 3: xhr.setRequestHeader(ct, 'multipart/form-data'); break
 			}
 		}
