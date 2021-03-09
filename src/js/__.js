@@ -38,47 +38,62 @@ var __ = {
 			a.push(encodeURIComponent(k)+'='+encodeURIComponent(obj[k]));return a
 		},[]).join('&')
 	},
-	// method: get/post/put/delete/patch,
-	// url: path, 
-	// params: null/parameters (optional),
-	// opt: {responseType,async,un,passwd,headers,useBody,useURL} (optional),
-	// cb: callback(err, state, res, userData),
-	// userData: optional
-	ajax: function(method, url, params, opt, cb, userData){
+
+	/**
+	 * ajax function browser implementation. nodejs implementation can be found in picos-utilA
+	 *
+	 * @param {string} method - get/post/put/delete/patch
+	 * @param {string} href - path,
+	 * @param {object} [params] - parameters (optional),
+	 * @param {object} [opt] - options (optional)
+	 * @param {object} [opt.query] - query string to be included regardless of request method
+	 * @param {string} [opt.responseType] - https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/responseType#syntax
+	 * @param {boolean} [opt.async] - placed in synchronous mode by passing false
+	 * @param {string} [opt.user] - basic auth username
+	 * @param {string} [opt.password] - basic auth password
+	 * @param {object} [opt.headers] - request headers
+	 * @param {Function} cb - callback(err, state, res, userData),
+	 * @param {object} [userData] - optional user data
+	 *
+	 * returns {void} - undefined
+	 */
+	ajax: function(method, href, params, opt, cb, userData){
 		cb=cb || function(err){
-			if(err)console.error(err)
+			if(err)console.error(method, href, params, opt, userData, err)
 		}
-		if (!url) return cb('url not defined')
-		method = method.toUpperCase()
-		params=params||{}
-		opt=opt||{}
+		if (!href) return cb('href not defined')
+		var options = Object.assign({}, opt||{})
 
 		var xhr = new XMLHttpRequest()
-		var useBody = null == opt.useBody ? 'GET' !== method : opt.useBody
-		var useURL = null == opt.useURL ? !useBody : opt.useURL
-		var dataType = (params.charAt ? 1 : (params instanceof FormData ? 3 : 2))
-
-		url = encodeURI(url)
-
-		if (useBody){
-			if (2===dataType) params=JSON.stringify(params)
+		var M = method.toUpperCase()
+		var isGet ='GET' === M
+		var dataType = 0
+		if (params){
+			dataType = params.charAt ? 1 : (params instanceof FormData ? 3 : 2))
 		}
-		if (useURL){
-			url += (-1===url.indexOf('?')?'?':'&')+'appVer='+__.env.appVer||0
+
+		var urlobj = new URL(href)
+		var sep = urlobj.search && -1=== urlobj.search.indexOf('?')?'?':'&'
+
+		if (isGet){
+			urlobj.search += sep + __.querystring(Object.assign({_v: __.env.appVer || 0}, options.query || {}))
 			if (params){
-				url += '&'
+				href += '&'
 				switch(dataType){
-				case 1: url += encodeURIComponent(params); break
-				case 2: url += __.querystring(params); break
+				case 1: urlobj.search += encodeURIComponent(params); break
+				case 2: urlobj.search += __.querystring(params); break
 				case 3: return cb('FormData with GET method is not supported yet')
 				}
 				params = null
 			}
+		}else{
+			if (options.query) urlobj.search += sep + __.querystring(options.query)
+			if (2===dataType) params=JSON.stringify(params)
 		}
 
-		xhr.open(method, url, !opt.sync, opt.un, opt.passwd)
+		xhr.open(M, urlobj.toString(), options.async, options.user, options.password)
 
-		xhr.timeout=opt.timeout||0
+		xhr.timeout=options.timeout||0
 		xhr.responseType=opt.responseType||''
 
 		xhr.onreadystatechange=function(){
@@ -98,12 +113,11 @@ var __ = {
 			cb({error:xhr.statusText,code:xhr.status,src:evt,params:arguments}, xhr.readyState, null, userData)
 		}
 		var ct='Content-Type'
-		var h=opt.headers
+		var h=options.headers
 		// never set Content-Type, it will trigger preflight options and chrome 35 has problem with json type
-		//if (useBody && params && 2 === dataType) xhr.setRequestHeader('Content-Type', 'application/json')
-		if (useBody && (!h || !h[ct]) && params){
+		if (!isGet && (!h || !h[ct]) && params){
 			switch(dataType){
-			case 1:
+			case 1: xhr.setRequestHeader(ct, 'application/json'); break
 			case 2: xhr.setRequestHeader(ct, 'text/plain'); break
 			case 3: xhr.setRequestHeader(ct, 'multipart/form-data'); break
 			}
