@@ -72,7 +72,7 @@ var __ = {
 			dataType = params.charAt ? 1 : (params instanceof FormData ? 3 : 2)
 		}
 
-		var urlobj = new URL(href)
+		var urlobj = new URL(href, window.location.href)
 		var sep = urlobj.search && -1=== urlobj.search.indexOf('?')?'?':'&'
 
 		if (isGet){
