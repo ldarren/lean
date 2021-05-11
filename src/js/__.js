@@ -33,9 +33,12 @@ var __ = {
 		if (o) return callee(o, p)
 		return 0
 	},
+	/**
+	 * omitted encodeURIComponent as browser is adding that
+	 */
 	querystring: function(obj){
 		return Object.keys(obj).reduce(function(a,k){
-			a.push(encodeURIComponent(k)+'='+encodeURIComponent(obj[k]));return a
+			a.push(k+'='+obj[k]);return a
 		},[]).join('&')
 	},
 
@@ -73,14 +76,14 @@ var __ = {
 		}
 
 		var urlobj = new URL(href, window.location.href)
-		var sep = urlobj.search && -1=== urlobj.search.indexOf('?')?'?':'&'
+		var sep = null != urlobj.search && -1=== urlobj.search.indexOf('?')?'?':'&'
 
 		if (isGet){
 			urlobj.search += sep + __.querystring(Object.assign({_v: __.env.appVer || 0}, options.query || {}))
 			if (params){
 				href += '&'
 				switch(dataType){
-				case 1: urlobj.search += '&' + encodeURIComponent(params); break
+				case 1: urlobj.search += '&' + params; break
 				case 2: urlobj.search += '&' + __.querystring(params); break
 				case 3: return cb('FormData with GET method is not supported yet')
 				}

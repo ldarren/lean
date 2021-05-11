@@ -53,7 +53,7 @@ test('ensure __.ajax post with opt.query', function(cb){
 		cb(null, !args.q1 && args.q2 === '2')
 	})
 })
-test('ensure mxied query string works', function(cb){
+test('ensure mixed query string works', function(cb){
 	__.ajax('get', 'https://httpbin.org/anything?q1=1', {q2:2}, {query: {q3:3}}, (err,code,res)=>{
 		if (4!==code) return
 		if (err) return cb(err)
@@ -63,6 +63,18 @@ test('ensure mxied query string works', function(cb){
 			cb(e)
 		}
 		cb(null, args.q1 === '1' && args.q2 === '2' && args.q3 === '3')
+	})
+})
+test('ensure no over encodeURLComponent', function(cb){
+	__.ajax('get', 'https://httpbin.org/anything?q1=a,b', 'q2=idx,id', {query: {q3:'1,2,3'}}, (err,code,res)=>{
+		if (4!==code) return
+		if (err) return cb(err)
+		try{
+			var {args}=JSON.parse(res)
+		} catch(e){
+			cb(e)
+		}
+		cb(null, args.q1 === 'a,b' && args.q2 === 'idx,id' && args.q3 === '1,2,3')
 	})
 })
 test('ensure __.dom dataset work correctly', cb => {
