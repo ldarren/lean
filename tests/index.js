@@ -66,16 +66,16 @@ test('ensure mixed query string works', function(cb){
 	})
 })
 test('ensure no over encodeURLComponent', function(cb){
-	__.ajax('get', 'https://httpbin.org/anything?q1=a,b', 'q2=idx,id', {query: {q3:'1,2,3'}}, (err,code,res)=>{
-		if (4!==code) return
-		if (err) return cb(err)
-		try{
-			var {args}=JSON.parse(res)
-		} catch(e){
-			cb(e)
-		}
-		cb(null, args.q1 === 'a,b' && args.q2 === 'idx,id' && args.q3 === '1,2,3')
-	})
+    __.ajax('get', 'https://httpbin.org/anything?<h1>=a,b', '<h2>=idx,id', {query: {'<h3>':'1,2,3'}}, (err,code,res)=>{
+        if (4!==code) return
+        if (err) return cb(err)
+        try{
+            var {args}=JSON.parse(res)
+        } catch(e){
+            cb(e)
+        }
+        cb(null, args['<h1>'] === 'a,b' && args['<h2>'] === 'idx,id' && args['<h3>'] === '1,2,3')
+    })
 })
 test('ensure __.dom dataset work correctly', cb => {
 	const hello = 'world'
