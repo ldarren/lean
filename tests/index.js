@@ -5,6 +5,22 @@ test('ensure __.escapeXML work correctly', cb => {
 	const safe = __.escapeXML(unsafe)
 	cb(null, -1 === safe.indexOf('<script>'))
 })
+test('ensure __.formdata2json work correctly', cb => {
+	const formdata = new FormData
+	formdata.append('uid', 'hello')
+	formdata.append('passwd', 'world')
+	let json = __.formdata2json(formdata)
+	if (formdata.get('uid') !== json.uid || formdata.get('passwd') !== json.passwd) return cb(null, false)
+
+	const ele = document.createElement('form')
+	ele.innerHTML = `
+<label for="uid">name:</label><input type="text" name="uid" value="hello">
+<label for="passwd">password:</label><input type="text" name="passwd" value="world">
+<input type="submit" value="Submit!">
+  `
+	json = __.formdata2json(ele)
+	cb(null, formdata.get('uid') === json.uid && formdata.get('passwd') === json.passwd)
+})
 test('ensure __.ajax get work correctly', cb => {
 	const req = {i: '1'}
 	const xhr = __.ajax('GET', 'https://httpbin.org/get', req, null, (err, state, json) => {
@@ -27,6 +43,15 @@ test('ensure __.ajax post json work correctly', cb => {
 		if (4 !== state) return
 		const res = JSON.parse(json)
 		cb(err, req.i === res.json.i)
+	})
+})
+test('ensure __.ajax post formdata work correctly', cb => {
+	const ele = document.createElement('form')
+	ele.innerHTML = '<input type="text" name="i" value="1">'
+	const xhr = __.ajax('POST', 'https://httpbin.org/post', ele, {headers:{'Content-Type':'application/json'}}, (err, state, json) => {
+		if (4 !== state) return
+		const res = JSON.parse(json)
+		cb(err, (new FormData(ele)).get('i') === res.json.i)
 	})
 })
 test('ensure __.ajax get with opt.query', function(cb){

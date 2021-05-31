@@ -43,6 +43,11 @@ var __ = {
 		},[]).join('&')
 	},
 
+	formdata2json: function(formdata){
+		formdata = formdata instanceof HTMLElement ? new FormData(formdata) : formdata
+		return Object.fromEntries(formdata)
+	},
+
 	/**
 	 * ajax function browser implementation. nodejs implementation can be found in picos-utilA
 	 *
@@ -73,7 +78,11 @@ var __ = {
 		var isGet ='GET' === M
 		var dataType = 0
 		if (params){
-			dataType = params.charAt ? 1 : (params instanceof FormData ? 3 : 2)
+			dataType = params.charAt ? 1 : (params instanceof FormData ? 3 : (params instanceof HTMLElement) ? 4 : 2)
+		}
+		switch(dataType){
+		case 3:
+		case 4: params = __.formdata2json(params); break
 		}
 
 		var urlobj = new URL(href, window.location.href)
@@ -86,13 +95,14 @@ var __ = {
 			if (params){
 				switch(dataType){
 				case 1: search.push(params); break
-				case 2: search.push(__.querystring(params)); break
-				case 3: return cb('FormData with GET method is not supported yet')
+				case 2:
+				case 3:
+				case 4: search.push(__.querystring(params)); break
 				}
 			}
 			search.push(__.querystring({_v: __.env.appVer || 0}))
 		}else{
-			if (2===dataType) body=JSON.stringify(params)
+			if (1!==dataType) body=JSON.stringify(params)
 		}
 		if (search.length) urlobj.search = search.join('&')
 
