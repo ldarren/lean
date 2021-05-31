@@ -33,10 +33,19 @@ var __ = {
 		if (o) return callee(o, p)
 		return 0
 	},
+	/**
+	 * omitted encodeURIComponent as browser is adding that
+	 */
 	querystring: function(obj){
+		if (!obj) return ''
 		return Object.keys(obj).reduce(function(a,k){
-			a.push(encodeURIComponent(k)+'='+encodeURIComponent(obj[k]));return a
+			a.push(k+'='+obj[k]);return a
 		},[]).join('&')
+	},
+
+	formdata2json: function(formdata){
+		formdata = formdata instanceof HTMLElement ? new FormData(formdata) : formdata
+		return Object.fromEntries(formdata)
 	},
 
 	/**
@@ -69,27 +78,33 @@ var __ = {
 		var isGet ='GET' === M
 		var dataType = 0
 		if (params){
-			dataType = params.charAt ? 1 : (params instanceof FormData ? 3 : 2)
+			dataType = params.charAt ? 1 : (params instanceof FormData ? 3 : (params instanceof HTMLElement) ? 4 : 2)
+		}
+		switch(dataType){
+		case 3:
+		case 4: params = __.formdata2json(params); break
 		}
 
 		var urlobj = new URL(href, window.location.href)
-		var sep = urlobj.search && -1=== urlobj.search.indexOf('?')?'?':'&'
+		var search = []
+		var body
 
+		if (urlobj.search) search.push(urlobj.search)
+		if (options.query) search.push(__.querystring(options.query))
 		if (isGet){
-			urlobj.search += sep + __.querystring(Object.assign({_v: __.env.appVer || 0}, options.query || {}))
 			if (params){
-				href += '&'
 				switch(dataType){
-				case 1: urlobj.search += '&' + encodeURIComponent(params); break
-				case 2: urlobj.search += '&' + __.querystring(params); break
-				case 3: return cb('FormData with GET method is not supported yet')
+				case 1: search.push(params); break
+				case 2:
+				case 3:
+				case 4: search.push(__.querystring(params)); break
 				}
-				params = null
 			}
+			search.push(__.querystring({_v: __.env.appVer || 0}))
 		}else{
-			if (options.query) urlobj.search += sep + __.querystring(options.query)
-			if (2===dataType) params=JSON.stringify(params)
+			if (1!==dataType) body=JSON.stringify(params)
 		}
+		if (search.length) urlobj.search = search.join('&')
 
 		xhr.open(M, urlobj.toString(), !options.sync, options.user, options.password)
 
@@ -115,7 +130,7 @@ var __ = {
 		var ct='Content-Type'
 		var h=options.headers
 		// never set Content-Type, it will trigger preflight options and chrome 35 has problem with json type
-		if (!isGet && (!h || !h[ct]) && params){
+		if (!isGet && (!h || !h[ct]) && body){
 			switch(dataType){
 			case 1: xhr.setRequestHeader(ct, 'text/plain'); break
 			case 2: xhr.setRequestHeader(ct, 'application/json'); break
@@ -124,7 +139,7 @@ var __ = {
 		}
 		for (var k in h) xhr.setRequestHeader(k, h[k])
 
-		xhr.send(params)
+		xhr.send(body)
 		return xhr
 	},
 	// Use the browser's built-in functionality to quickly and safely escape the string
