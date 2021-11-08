@@ -30,11 +30,11 @@ test('ensure __.ajax get work correctly', cb => {
 	})
 })
 test('ensure __.ajax post work correctly', cb => {
-	const req = {i: '1'}
+	const req = JSON.stringify({i: '1'})
 	const xhr = __.ajax('POST', 'https://httpbin.org/post', req, null, (err, state, json) => {
 		if (4 !== state) return
 		const res = JSON.parse(json)
-		cb(err, req.i === res.json.i)
+		cb(err, req === res.data)
 	})
 })
 test('ensure __.ajax post json work correctly', cb => {

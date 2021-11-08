@@ -103,6 +103,7 @@ var __ = {
 			search.push(__.querystring({_v: __.env.appVer || 0}))
 		}else{
 			if (1!==dataType) body=JSON.stringify(params)
+			else body=params
 		}
 		if (search.length) urlobj.search = search.join('&')
 
