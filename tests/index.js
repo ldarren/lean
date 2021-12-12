@@ -21,9 +21,9 @@ test('ensure __.formdata2json work correctly', cb => {
 	json = __.formdata2json(ele)
 	cb(null, formdata.get('uid') === json.uid && formdata.get('passwd') === json.passwd)
 })
-test('ensure __.ajax get work correctly', cb => {
+test('ensure __.ajax get with baseurl work correctly', cb => {
 	const req = {i: '1'}
-	const xhr = __.ajax('GET', 'https://httpbin.org/get', req, null, (err, state, json) => {
+	const xhr = __.ajax('GET', '/get', req, {baseurl: 'https://httpbin.org'}, (err, state, json) => {
 		if (4 !== state) return
 		const res = JSON.parse(json)
 		cb(err, req.i === res.args.i)
