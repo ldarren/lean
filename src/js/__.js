@@ -111,6 +111,7 @@ var __ = {
 
 		xhr.open(M, urlobj.toString(), !options.sync, options.user, options.password)
 
+		xhr.withCredentials=options.withCredentials||0
 		xhr.timeout=options.timeout||0
 		xhr.responseType=options.responseType||''
 
