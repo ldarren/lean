@@ -56,7 +56,7 @@ fs.readlink(symPath, (err, realPath)=>{
 						if (err) return console.error(err)
 						fs.writeFile(destAbs+MIN_MAP, min.map, 'utf8', (err)=>{
 							if (err) return console.error(err)
-							console.log('Done!')
+							console.log('Concat Done!')
 						})
 					})
 				})
