@@ -12,7 +12,7 @@ new CleanCSS({rebase:false,sourceMap:true,target:target}).minify(src, (err, mini
         if (err) return console.error(err)
         fs.writeFile(target+'.map', minified.sourceMap.toString(), 'utf8', (err)=>{
             if (err) return console.error(err)
-            console.log('done')
+            console.log('build done!')
         })
     })
 })

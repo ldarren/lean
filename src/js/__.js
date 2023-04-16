@@ -61,6 +61,8 @@ var __ = {
 	 * @param {string} [opt.user] - basic auth username
 	 * @param {string} [opt.password] - basic auth password
 	 * @param {object} [opt.headers] - request headers
+	 * @param {number} [opt.timeout=0] - milliseconds of a request can take before terminating. The default value is no timeout [0]
+	 * @param {string} [opt.baseurl] - base url if it is not window.location.href
 	 * @param {Function} cb - callback(err, state, res, userData),
 	 * @param {object} [userData] - optional user data
 	 *
@@ -85,7 +87,7 @@ var __ = {
 		case 4: params = __.formdata2json(params); break
 		}
 
-		var urlobj = new URL(href, window.location.href)
+		var urlobj = new URL(href, options.baseurl||window.location.href)
 		var search = []
 		var body
 
@@ -109,6 +111,7 @@ var __ = {
 
 		xhr.open(M, urlobj.toString(), !options.sync, options.user, options.password)
 
+		xhr.withCredentials=options.withCredentials||0
 		xhr.timeout=options.timeout||0
 		xhr.responseType=options.responseType||''
 
