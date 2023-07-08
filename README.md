@@ -12,6 +12,8 @@ Lean is a lightweight JavaScript library that provides various utility functions
 
 - **AJAX Requests**: Lean includes a lightweight AJAX function for making HTTP requests. It supports GET, POST, PUT, DELETE, and PATCH methods and provides options for handling query parameters, headers, and more.
 
+For making AJAX requests in Node.js, you can use the ajax function provided by the [picos-util](https://github.com/ldarren/picos-util) library. The ajax function in picos-util has the same input parameters and output response format as the AJAX function in Lean.
+
 ## Installation
 
 build commands
