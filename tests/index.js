@@ -55,11 +55,11 @@ test('ensure __.ajax post formdata work correctly', cb => {
 	})
 })
 test('ensure __.ajax get with opt.query', function(cb){
-	__.ajax('get', 'https://httpbin.org/anything', {q1:1}, {query: {q2:2}}, (err,code,res)=>{
+	__.ajax('get', 'https://httpbin.org/anything', {q1:1}, {query: {q2:2}}, (err,code,json)=>{
 		if (4!==code) return
 		if (err) return cb(err)
 		try{
-			var {args}=JSON.parse(res)
+			var {args}=JSON.parse(json)
 		} catch(e){
 			cb(e)
 		}
@@ -67,23 +67,47 @@ test('ensure __.ajax get with opt.query', function(cb){
 	})
 })
 test('ensure __.ajax post with opt.query', function(cb){
-	__.ajax('post', 'https://httpbin.org/anything', {q1:1}, {query: {q2:2}}, (err,code,res)=>{
+	__.ajax('post', 'https://httpbin.org/anything', {q1:1}, {query: {q2:2}}, (err,code,json)=>{
 		if (4!==code) return
 		if (err) return cb(err)
 		try{
-			var {args}=JSON.parse(res)
+			var {args}=JSON.parse(json)
 		} catch(e){
 			cb(e)
 		}
 		cb(null, !args.q1 && args.q2 === '2')
 	})
 })
+test('ensure __.ajax redirect by default', function(cb){
+	__.ajax('get', 'https://httpbin.org/redirect-to', {url: 'http://checkip.amazonaws.com', status_code: 302}, null, (err,code,body,xhr)=>{
+		if (4!==code) return
+		if (err) return cb(err)
+		const ip = body.replace(/(\r\n|\n|\r)/gm, '')
+		cb(null, 200 === xhr.status && /^((\d\d?|1\d\d|2([0-4]\d|5[0-5]))\.){3}(\d\d?|1\d\d|2([0-4]\d|5[0-5]))$/.test(ip))
+	})
+})
+test('ensure __.ajax redirect can be turn off', function(cb){
+	// xhr auto redirect 302 and 304, therefore 300 is used here
+	const reqBody = {url: 'http://checkip.amazonaws.com', status_code: 300}
+	__.ajax('get', 'https://httpbin.org/redirect-to', reqBody, {redirect:0}, (err,code,json,xhr)=>{
+		if (4!==code) return
+		if (err) return cb(err)
+		cb(null, reqBody.status_code === xhr.status && xhr.getResponseHeader('location') === reqBody.url)
+	})
+})
+test('ensure __.ajax userData in error', function(cb){
+	__.ajax('get', '//httpbin.org', null, null, (err,code,json,xhr,userData)=>{
+		if (4!==code) return
+		if (err) return cb(null, false)
+		cb(null, 'UD' === userData)
+	}, 'UD')
+})
 test('ensure mixed query string works', function(cb){
-	__.ajax('get', 'https://httpbin.org/anything?q1=1', {q2:2}, {query: {q3:3}}, (err,code,res)=>{
+	__.ajax('get', 'https://httpbin.org/anything?q1=1', {q2:2}, {query: {q3:3}}, (err,code,json)=>{
 		if (4!==code) return
 		if (err) return cb(err)
 		try{
-			var {args}=JSON.parse(res)
+			var {args}=JSON.parse(json)
 		} catch(e){
 			cb(e)
 		}
@@ -91,11 +115,11 @@ test('ensure mixed query string works', function(cb){
 	})
 })
 test('ensure no over encodeURLComponent', function(cb){
-    __.ajax('get', 'https://httpbin.org/anything?<h1>=a,b', '<h2>=idx,id', {query: {'<h3>':'1,2,3'}}, (err,code,res)=>{
+    __.ajax('get', 'https://httpbin.org/anything?<h1>=a,b', '<h2>=idx,id', {query: {'<h3>':'1,2,3'}}, (err,code,json)=>{
         if (4!==code) return
         if (err) return cb(err)
         try{
-            var {args}=JSON.parse(res)
+            var {args}=JSON.parse(json)
         } catch(e){
             cb(e)
         }
