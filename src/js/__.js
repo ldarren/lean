@@ -63,7 +63,8 @@ var __ = {
 	 * @param {object} [opt.headers] - request headers
 	 * @param {number} [opt.timeout=0] - milliseconds of a request can take before terminating. The default value is no timeout [0]
 	 * @param {string} [opt.baseurl] - base url if it is not window.location.href
-	 * @param {Function} cb - callback(err, state, res, userData),
+	 * @param {boolean} [opt.redirect=1] - redirect = 1 follow redirect path, 0 = return redirect as a result. default 1
+	 * @param {Function} cb - callback(err, state, resBody, res, userData),
 	 * @param {object} [userData] - optional user data
 	 *
 	 * returns {void} - undefined
@@ -72,8 +73,8 @@ var __ = {
 		cb=cb || function(err){
 			if(err)console.error(method, href, params, opt, userData, err)
 		}
-		if (!href) return cb('href not defined')
-		var options = Object.assign({}, opt||{})
+		if (!href) return cb('href not defined', 4, null, null, userData)
+		var options = Object.assign({redirect: 1}, opt||{})
 
 		var xhr = new XMLHttpRequest()
 		var M = method.toUpperCase()
@@ -118,18 +119,19 @@ var __ = {
 		xhr.onreadystatechange=function(){
 			if (1 < xhr.readyState){
 				var st = xhr.status, loc
-				if (st>=300 && st<400 && (loc=xhr.getResponseHeader('location'))) return __.ajax(method,loc,params,opt,cb,userData)
+				if (st>=300 && st<400 && options.redirect && (loc=xhr.getResponseHeader('location'))) return __.ajax(method,loc,params,opt,cb,userData)
 				xhr.onerror=void 0 // debounce for cors error
 				return cb(
 					// webkit st === 0 when get from local
-					(300>st || (!st && xhr.response)) ? null : {error:xhr.statusText,code:st},
+					(400>=st || (!st && xhr.response)) ? null : {error:xhr.statusText,code:st},
 					xhr.readyState,
 					xhr.response,
+					xhr,
 					userData)
 			}
 		}
 		xhr.ontimeout=xhr.onerror=function(evt){
-			cb({error:xhr.statusText,code:xhr.status,src:evt,params:arguments}, xhr.readyState, null, userData)
+			cb({error:xhr.statusText,code:xhr.status,src:evt,params:arguments}, xhr.readyState, null, null, userData)
 		}
 		var ct='Content-Type'
 		var h=options.headers
