@@ -61,7 +61,7 @@ test('ensure __.ajax get with opt.query', function(cb){
 		try{
 			var {args}=JSON.parse(json)
 		} catch(e){
-			cb(e)
+			return cb(e)
 		}
 		cb(null, args.q1 === '1' && args.q2 === '2')
 	})
@@ -73,13 +73,14 @@ test('ensure __.ajax post with opt.query', function(cb){
 		try{
 			var {args}=JSON.parse(json)
 		} catch(e){
-			cb(e)
+			return cb(e)
 		}
 		cb(null, !args.q1 && args.q2 === '2')
 	})
 })
 test('ensure __.ajax redirect by default', function(cb){
-	__.ajax('get', 'https://httpbin.org/redirect-to', {url: 'http://checkip.amazonaws.com', status_code: 302}, null, (err,code,body,xhr)=>{
+	// xhr auto redirect 302 and 304, therefore 300 is used here
+	__.ajax('get', 'https://httpbin.org/redirect-to', {url: 'http://checkip.amazonaws.com', status_code: 300}, null, (err,code,body,xhr)=>{
 		if (4!==code) return
 		if (err) return cb(err)
 		const ip = body.replace(/(\r\n|\n|\r)/gm, '')
@@ -109,22 +110,22 @@ test('ensure mixed query string works', function(cb){
 		try{
 			var {args}=JSON.parse(json)
 		} catch(e){
-			cb(e)
+			return cb(e)
 		}
 		cb(null, args.q1 === '1' && args.q2 === '2' && args.q3 === '3')
 	})
 })
 test('ensure no over encodeURLComponent', function(cb){
-    __.ajax('get', 'https://httpbin.org/anything?<h1>=a,b', '<h2>=idx,id', {query: {'<h3>':'1,2,3'}}, (err,code,json)=>{
-        if (4!==code) return
-        if (err) return cb(err)
-        try{
-            var {args}=JSON.parse(json)
-        } catch(e){
-            cb(e)
-        }
-        cb(null, args['<h1>'] === 'a,b' && args['<h2>'] === 'idx,id' && args['<h3>'] === '1,2,3')
-    })
+	__.ajax('get', 'https://httpbin.org/anything?<h1>=a,b', '<h2>=idx,id', {query: {'<h3>':'1,2,3'}}, (err,code,json)=>{
+		if (4!==code) return
+		if (err) return cb(err)
+		try{
+			var {args}=JSON.parse(json)
+		} catch(e){
+			return cb(e)
+		}
+		cb(null, args['<h1>'] === 'a,b' && args['<h2>'] === 'idx,id' && args['<h3>'] === '1,2,3')
+	})
 })
 test('ensure __.dom dataset work correctly', cb => {
 	const hello = 'world'
